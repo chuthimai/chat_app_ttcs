@@ -1,3 +1,4 @@
+import 'package:chat_app_ttcs/screens/user/start_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginFrm extends StatefulWidget {
@@ -12,6 +13,11 @@ class LoginFrm extends StatefulWidget {
 class _LoginFrmState extends State<LoginFrm> {
   // final _form = GlobalKey<FormState>();
 
+  void _switchForgotPassword(BuildContext context) {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (cxt) => const StartScreen(titleAppBar: "Forgot Password")));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -19,7 +25,10 @@ class _LoginFrmState extends State<LoginFrm> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Loggin Form", style: Theme.of(context).textTheme.titleLarge,),
+          Text(
+            "Loggin Form",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 30),
           TextFormField(
             maxLength: 50,
@@ -49,7 +58,9 @@ class _LoginFrmState extends State<LoginFrm> {
               return null;
             },
           ),
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 20,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -57,16 +68,18 @@ class _LoginFrmState extends State<LoginFrm> {
               ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(213, 246, 189, 208),
+                  backgroundColor: const Color.fromARGB(213, 246, 189, 208),
                 ),
                 child: const Text("Login"),
               ),
-              const SizedBox(width: 20,),
+              const SizedBox(
+                width: 20,
+              ),
               ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-
-                ),
+                onPressed: () {
+                  _switchForgotPassword(context);
+                },
+                style: ElevatedButton.styleFrom(),
                 child: const Text("Forgot Password"),
               ),
             ],

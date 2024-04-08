@@ -3,21 +3,25 @@ import 'package:chat_app_ttcs/forms/user/login.dart';
 import 'package:flutter/material.dart';
 
 class StartScreen extends StatelessWidget {
-  const StartScreen({super.key});
+  final String titleAppBar;
+
+  const StartScreen({super.key, required this.titleAppBar});
 
   @override
   Widget build(BuildContext context) {
+    Widget form = titleAppBar=="Login" ? const LoginFrm() : const ForgotPasswordFrm();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Loggin"),
+        title: Text(titleAppBar),
       ),
-      body: const Center(
+      body: Center(
         child: Card(
-          margin: EdgeInsets.symmetric(horizontal: 70),
+          margin: const EdgeInsets.symmetric(horizontal: 70),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
             child: SingleChildScrollView(
-              child: ForgotPasswordFrm(),
+              child: form,
             ),
           ),
         ),
