@@ -1,0 +1,77 @@
+import 'package:chat_app_ttcs/forms/admin/group/group_form.dart';
+import 'package:chat_app_ttcs/forms/admin/user/user_form.dart';
+import 'package:chat_app_ttcs/forms/admin/user/users_table.dart';
+import 'package:chat_app_ttcs/forms/search/search.dart';
+import 'package:flutter/material.dart';
+
+class AllUsersScreen extends StatefulWidget {
+  const AllUsersScreen({super.key});
+
+  @override
+  State<AllUsersScreen> createState() => _AllUsersScreenState();
+}
+
+class _AllUsersScreenState extends State<AllUsersScreen> {
+  void _openNewUserForm() {
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (cxt) => UserForm(),
+    );
+  }
+
+  void _openNewGroupForm() {
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (cxt) => GroupForm(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          Search(),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: [
+              Spacer(),
+              FloatingActionButton.extended(
+                onPressed: _openNewUserForm,
+                label: Row(
+                  children: [Icon(Icons.add), Text("Add Acount")],
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              FloatingActionButton.extended(
+                onPressed: _openNewGroupForm,
+                label: Row(
+                  children: [Icon(Icons.add), Text("Add Group")],
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          UserTable(),
+        ],
+      ),
+    );
+  }
+}
