@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "297130269711",
+    "project_id": "flutter-chat-ttcs",
+    "storage_bucket": "flutter-chat-ttcs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297130269711:android:93ae693577e07352a0177a",
+        "android_client_info": {
+          "package_name": "com.example.chat_app_ttcs"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwk-zJlP-_6Yb2AR9XRR5rDIY75Qs5jNs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

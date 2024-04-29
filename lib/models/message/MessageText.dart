@@ -1,11 +1,10 @@
 import 'package:chat_app_ttcs/models/message/message.dart';
 
 class MessageText extends Message {
-  String contentMessage;
+  String _contentMessage;
 
-  MessageText({
-    required super.idConversation,
-    required super.idUserSend,
-    required this.contentMessage,
-  });
+  MessageText(int idMessage, int idConversation, String idUserSend, this._contentMessage)
+      : super(idMessage, idConversation, idUserSend);
+
+  String get contentMessage => _contentMessage;
 }

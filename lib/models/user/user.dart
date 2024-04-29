@@ -1,10 +1,8 @@
 import 'package:chat_app_ttcs/models/process/process_email.dart';
 import 'package:chat_app_ttcs/models/process/process_name.dart';
 
-int idUserControl = 1;
-
 class User {
-  final int _idUser = idUserControl++;
+  final String _idUser;
   String _fullName;
   final bool _gender;
   String _phoneNum;
@@ -20,7 +18,7 @@ class User {
     _fullName = value;
   }
 
-  int get idUser => _idUser;
+  String get idUser => _idUser;
 
   int get idJobTransfer => _idJobTransfer!;
 
@@ -29,13 +27,15 @@ class User {
   }
 
   User({
+    required String idUser,
     required String fullName,
     bool gender = true,
     required String phoneNum,
     required String userEmail,
     required String password,
     required String role,
-  })  : _role = role,
+  })  : _idUser = idUser,
+        _role = role,
         _password = password,
         _userEmail = userEmail,
         _phoneNum = phoneNum,

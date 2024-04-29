@@ -1,10 +1,13 @@
-int idDepartmentControl = 1;
-
 class Department {
-  final int _idDepartment = idDepartmentControl++;
-  final String nameDepartment;
+  final int _idDepartment;
+  final String _nameDepartment;
 
-  Department(this.nameDepartment);
+  Department(
+    this._idDepartment,
+    this._nameDepartment,
+  );
+
+  String get nameDepartment => _nameDepartment;
 
   int get idDepartment => _idDepartment;
 }

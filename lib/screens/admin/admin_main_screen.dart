@@ -2,6 +2,7 @@ import 'package:chat_app_ttcs/forms/admin/user/user_form.dart';
 import 'package:chat_app_ttcs/screens/admin/all_groups_screen.dart';
 import 'package:chat_app_ttcs/screens/admin/all_users_screen.dart';
 import 'package:chat_app_ttcs/screens/user/change_password_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AdminMainScreen extends StatefulWidget {
@@ -121,6 +122,22 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
                   _selectChangePassword(context);
                 },
               ),
+              ListTile(
+                  leading: Icon(
+                    Icons.logout,
+                    size: 26,
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
+                  title: Text(
+                    "Logout",
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      fontSize: 22,
+                    ),
+                  ),
+                  onTap: () {
+                    FirebaseAuth.instance.signOut();
+                  })
             ],
           ),
         ),

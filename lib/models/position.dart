@@ -1,10 +1,10 @@
-int idPositionControl = 1;
-
 class Position {
-  final int _idPosition = idPositionControl++;
-  final String namePosition;
+  final int _idPosition;
+  final String _namePosition;
 
-  Position(this.namePosition);
+  Position(this._idPosition, this._namePosition);
 
   int get idPosition => _idPosition;
+
+  String get namePosition => _namePosition;
 }

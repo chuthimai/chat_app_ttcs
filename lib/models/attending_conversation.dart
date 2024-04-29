@@ -1,11 +1,17 @@
 class AttendingConversation {
-  final int idUser;
-  final int idConversation;
-  String conversationRole;
+  final int _idUser;
+  final int _idConversation;
+  String _conversationRole;
 
-  AttendingConversation({
-    required this.idUser,
-    required this.idConversation,
-    required this.conversationRole,
-  });
+  AttendingConversation(
+    this._idUser,
+    this._idConversation,
+    this._conversationRole,
+  );
+
+  String get conversationRole => _conversationRole;
+
+  int get idConversation => _idConversation;
+
+  int get idUser => _idUser;
 }

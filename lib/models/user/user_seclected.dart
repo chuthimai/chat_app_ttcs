@@ -5,12 +5,14 @@ class UserSelected extends User {
   bool isSelected = false;
 
   UserSelected({
+    required String idUser,
     required String fullName,
     required String phoneNum,
     required String userEmail,
     required String password,
     required String role,
   }) : super(
+    idUser: idUser,
     fullName: fullName,
     phoneNum: phoneNum,
     userEmail: userEmail,

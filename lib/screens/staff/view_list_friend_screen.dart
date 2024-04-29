@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chat_app_ttcs/forms/staff/all_conversations.dart';
 import 'package:chat_app_ttcs/screens/user/change_password_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ViewListFriendScreen extends StatefulWidget {
@@ -96,7 +97,7 @@ class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
                         ),
                   ),
                   onTap: () {
-                    //TODO: logout
+                    FirebaseAuth.instance.signOut();
                   })
             ],
           ),

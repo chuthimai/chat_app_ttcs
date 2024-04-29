@@ -1,5 +1,10 @@
 import 'package:chat_app_ttcs/screens/user/start_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+// Truy cap vao doi tuong Firebase dc SDK Firebase tao va quan ly
+final _firebase = FirebaseAuth.instance;
+
 
 class LoginFrm extends StatefulWidget {
   const LoginFrm({super.key});
@@ -11,7 +16,33 @@ class LoginFrm extends StatefulWidget {
 }
 
 class _LoginFrmState extends State<LoginFrm> {
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _enteredEmail = '';
+  String _enteredPassword = '';
+
+  void _submit() async {
+    final isValid = _formKey.currentState!.validate(); // KQ chay xac thuc
+
+    if (!isValid) return;
+
+    _formKey.currentState!.save(); // thuc hien hanh dong onSave cua Form
+
+    try {
+      final userCredentials = await _firebase.signInWithEmailAndPassword(
+          email: _enteredEmail, password: _enteredPassword);
+      print(userCredentials);
+    } on FirebaseAuthException catch (error) {
+      // on xu ly 1 ngoai le cu the
+      print(error);
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.message ?? 'Your email or password is incorrect.'),
+        ),
+      );
+    }
+  }
+
 
   void _switchForgotPassword(BuildContext context) {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -21,7 +52,7 @@ class _LoginFrmState extends State<LoginFrm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      // key: _form,
+      key: _formKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -39,9 +70,17 @@ class _LoginFrmState extends State<LoginFrm> {
               hintText: "Email",
               border: OutlineInputBorder(),
             ),
-            onSaved: (value) {},
+            onSaved: (value) {
+              _enteredEmail = value!;
+            },
             validator: (value) {
-              // Kt trong database
+
+              if (value == null ||
+                  value.trim().isEmpty ||
+                  !value.contains('@cp.vn')) {
+                return 'Please enter a valid email address.';
+              }
+
               return null;
             },
           ),
@@ -52,9 +91,13 @@ class _LoginFrmState extends State<LoginFrm> {
               hintText: "Password",
               border: OutlineInputBorder(),
             ),
-            onSaved: (value) {},
+            onSaved: (value) {
+              _enteredPassword = value!;
+            },
             validator: (value) {
-              // kt trong database
+              if (value == null || value.trim().length < 6) {
+                return "Password must be at least 6 characters long.";
+              }
               return null;
             },
           ),
@@ -66,7 +109,7 @@ class _LoginFrmState extends State<LoginFrm> {
             children: [
               const Spacer(),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: _submit,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(213, 246, 189, 208),
                 ),
