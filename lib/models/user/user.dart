@@ -1,4 +1,3 @@
-import 'package:chat_app_ttcs/models/job_transfer.dart';
 import 'package:chat_app_ttcs/models/process/process_email.dart';
 import 'package:chat_app_ttcs/models/process/process_name.dart';
 

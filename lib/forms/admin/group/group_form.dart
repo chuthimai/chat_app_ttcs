@@ -4,13 +4,15 @@ import 'package:chat_app_ttcs/forms/search/search.dart';
 import 'package:flutter/material.dart';
 
 class GroupForm extends StatefulWidget {
-  GroupForm({super.key});
+  const GroupForm({super.key});
 
   @override
   State<GroupForm> createState() => _GroupFormState();
 }
 
 class _GroupFormState extends State<GroupForm> {
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

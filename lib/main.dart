@@ -1,5 +1,6 @@
 import 'package:chat_app_ttcs/screens/admin/admin_main_screen.dart';
 import 'package:chat_app_ttcs/screens/admin/edit_user_screen.dart';
+import 'package:chat_app_ttcs/screens/staff/view_list_friend_screen.dart';
 import 'package:chat_app_ttcs/screens/user/start_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -59,7 +60,7 @@ class MyApp extends StatelessWidget {
           extendedTextStyle: TextStyle(fontSize: 16),
         )
       ),
-      home: const AdminMainScreen(),
+      home: const ViewListFriendScreen(),
       themeMode: ThemeMode.dark,
     );
   }

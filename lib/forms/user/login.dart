@@ -11,7 +11,7 @@ class LoginFrm extends StatefulWidget {
 }
 
 class _LoginFrmState extends State<LoginFrm> {
-  // final _form = GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void _switchForgotPassword(BuildContext context) {
     Navigator.of(context).pushReplacement(MaterialPageRoute(

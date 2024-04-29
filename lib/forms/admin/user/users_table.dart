@@ -20,20 +20,20 @@ class _UserTableState extends State<UserTable> {
     );
   }
 
-  var userSelected = UserSeclected(
-    fullName: "",
-    phoneNum: "",
-    userEmail: "",
-    password: "",
-    role: "",
-  );
+  // var userSelected = UserSelected(
+  //   fullName: "chu thi mai",
+  //   phoneNum: "",
+  //   userEmail: "",
+  //   password: "",
+  //   role: "",
+  // );
 
   DataRow _showUser() {
     return DataRow(
-        selected: userSelected.isSelected,
+        selected: false,
         onSelectChanged: (bool? b) {
           setState(() {
-            userSelected.setSelected(userSelected.isSelected);
+            // userSelected.setSelected(userSelected.isSelected);
           });
         },
         cells: [
@@ -74,39 +74,35 @@ class _UserTableState extends State<UserTable> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: DataTable(
-        checkboxHorizontalMargin: 10,
-        showCheckboxColumn: true,
-        columns: const [
-          DataColumn(
-            label: Text("Name"),
-          ),
-          DataColumn(
-            label: Text("Gender"),
-          ),
-          DataColumn(
-            label: Text("Email"),
-          ),
-          DataColumn(
-            label: Text("Department"),
-          ),
-          DataColumn(
-            label: Text("Position"),
-          ),
-          DataColumn(
-            label: Text("Role"),
-          ),
-          DataColumn(
-            label: Text(""),
-          ),
-        ],
-        rows: [
-          _showUser(),
-          _showUser(),
-          _showUser(),
-        ],
-      ),
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          checkboxHorizontalMargin: 10,
+          showCheckboxColumn: true,
+          columns: [
+            DataColumn(
+              label: Text("Name"),
+            ),
+            DataColumn(
+              label: Text("Gender"),
+            ),
+            DataColumn(
+              label: Text("Email"),
+            ),
+            DataColumn(
+              label: Text("Department"),
+            ),
+            DataColumn(
+              label: Text("Position"),
+            ),
+            DataColumn(
+              label: Text("Role"),
+            ),
+            DataColumn(
+              label: Text(""),
+            ),
+          ],
+          rows: [_showUser()],
+        ),
     );
   }
 }

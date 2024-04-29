@@ -2,7 +2,9 @@ import 'package:chat_app_ttcs/forms/admin/group/group_form.dart';
 import 'package:chat_app_ttcs/forms/admin/user/user_form.dart';
 import 'package:chat_app_ttcs/forms/admin/user/users_table.dart';
 import 'package:chat_app_ttcs/forms/search/search.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class AllUsersScreen extends StatefulWidget {
   const AllUsersScreen({super.key});
@@ -32,7 +34,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -48,7 +50,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
               Spacer(),
               FloatingActionButton.extended(
                 onPressed: _openNewUserForm,
-                label: Row(
+                label: const Row(
                   children: [Icon(Icons.add), Text("Add Acount")],
                 ),
               ),
@@ -57,7 +59,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
               ),
               FloatingActionButton.extended(
                 onPressed: _openNewGroupForm,
-                label: Row(
+                label: const Row(
                   children: [Icon(Icons.add), Text("Add Group")],
                 ),
               ),
