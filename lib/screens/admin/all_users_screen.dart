@@ -4,6 +4,7 @@ import 'package:chat_app_ttcs/forms/admin/user/users_table.dart';
 import 'package:chat_app_ttcs/forms/search/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class AllUsersScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
-      builder: (cxt) => UserForm(),
+      builder: (cxt) => const UserForm(),
     );
   }
 
@@ -28,7 +29,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
-      builder: (cxt) => GroupForm(),
+      builder: (cxt) => const GroupForm(),
     );
   }
 
@@ -71,7 +72,8 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
           const SizedBox(
             height: 20,
           ),
-          const UserTable(),
+
+          const Expanded(child: SingleChildScrollView(child: UserTable()),)
         ],
       ),
     );

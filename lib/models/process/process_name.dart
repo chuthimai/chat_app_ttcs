@@ -40,7 +40,7 @@ class ProcessName {
 
   String setStandForName(name) {
     List<String> words = name.toLowerCase().split(" ");
-    String standForName = words[-1];
+    String standForName = words[words.length - 1];
     for (var i = 0; i < words.length - 1; i++) {
       standForName += words[i][0];
     }
