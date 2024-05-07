@@ -1,7 +1,8 @@
+import 'package:chat_app_ttcs/models/data_obj.dart';
 import 'package:chat_app_ttcs/models/process/process_email.dart';
 import 'package:chat_app_ttcs/models/process/process_name.dart';
 
-class User {
+class User extends DataObj {
   final String _idUser;
   String _fullName;
   final bool _gender;
@@ -11,6 +12,20 @@ class User {
   String _password;
   int? _idJobTransfer;
   String _role;
+  String _avartar = '';
+  bool _state = true;
+
+  bool get state => _state;
+
+  set state(bool value) {
+    _state = value;
+  }
+
+  String get avartar => _avartar;
+
+  set avartar(String value) {
+    _avartar = value;
+  }
 
   String get fullName => _fullName;
 
@@ -74,4 +89,42 @@ class User {
   }
 
   String? get companyEmail => _companyEmail;
+
+
+  set companyEmail(String? value) {
+    _companyEmail = value;
+  }
+
+  @override
+  Map<String, dynamic> toMap() => {
+        'id': _idUser,
+        'avatar': _avartar,
+        'companyEmail': _companyEmail,
+        'fullName': _fullName,
+        'gender': _gender,
+        'idJobTransfer': _idJobTransfer,
+        'password': _password,
+        'phoneNum': _phoneNum,
+        'role': _role,
+        'state': _state,
+        'userEmail': _userEmail
+      };
+
+  factory User.toUser(Map<String, dynamic> json) {
+    User user = User(
+      idUser: json['id'],
+      fullName: json['fullName'],
+      gender: json['gender'],
+      phoneNum: json['phoneNum'],
+      userEmail: json['userEmail'],
+      password: json['password'],
+      role: json['role'],
+    );
+    user.state = json['state'];
+    user.avartar = json['avatar'];
+    user.companyEmail = json['companyEmail'];
+    user.idJobTransfer = json['idJobTransfer'];
+
+    return user;
+  }
 }

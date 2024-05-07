@@ -34,9 +34,9 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Align(
+      alignment: Alignment.topCenter,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(
             height: 20,
@@ -71,7 +71,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
           const SizedBox(
             height: 20,
           ),
-          UserTable(),
+          const UserTable(),
         ],
       ),
     );

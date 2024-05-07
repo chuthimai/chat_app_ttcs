@@ -1,6 +1,4 @@
-import 'package:chat_app_ttcs/screens/admin/admin_main_screen.dart';
-import 'package:chat_app_ttcs/screens/admin/edit_user_screen.dart';
-import 'package:chat_app_ttcs/screens/staff/view_list_friend_screen.dart';
+import 'package:chat_app_ttcs/screens/user/main_screen.dart';
 import 'package:chat_app_ttcs/screens/user/start_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,36 +41,43 @@ class MyApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-          foregroundColor: const Color.fromARGB(255, 222, 36, 96),
-        )),
+              foregroundColor: const Color.fromARGB(255, 222, 36, 96),
+            )),
         dataTableTheme: const DataTableThemeData(
           headingTextStyle: TextStyle(fontWeight: FontWeight.bold),
           dataTextStyle: TextStyle(fontWeight: FontWeight.w400),
         ),
       ),
       theme: ThemeData().copyWith(
-        colorScheme: kColorScheme,
-        appBarTheme: const AppBarTheme().copyWith(
-          backgroundColor: const Color.fromARGB(255, 236, 119, 159),
-          titleTextStyle: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w500,
-            fontSize: 20,
+          colorScheme: kColorScheme,
+          appBarTheme: const AppBarTheme().copyWith(
+            backgroundColor: const Color.fromARGB(255, 236, 119, 159),
+            titleTextStyle: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+              fontSize: 20,
+            ),
           ),
-        ),
-        dataTableTheme: const DataTableThemeData(
-          headingTextStyle: TextStyle(fontWeight: FontWeight.bold),
-          dataTextStyle: TextStyle(fontWeight: FontWeight.w400),
-        ),
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          extendedTextStyle: TextStyle(fontSize: 16),
-        )
+          dataTableTheme: const DataTableThemeData(
+            headingTextStyle: TextStyle(fontWeight: FontWeight.bold),
+            dataTextStyle: TextStyle(fontWeight: FontWeight.w400),
+          ),
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+            extendedTextStyle: TextStyle(fontSize: 16),
+          )
       ),
       home: StreamBuilder(
+        // tao 1 ma xac thuc cho 1 phien dang nhap
+        // nhận vào một luồng dữ liệu, luồng này phát ra dữ liệu về trạng thái xác thực của người dùng,
+        // cho biết liệu họ đã đăng nhập hay chưa.
         stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (cxt, snapshot) {
-          if (snapshot.hasData) return ViewListFriendScreen();
-          return StartScreen(titleAppBar: "Login");
+
+        // Hàm này được gọi mỗi khi có một sự thay đổi trong luồng dữ liệu
+        builder: (cxt, snapshot)  {
+          if (snapshot.hasData) {
+            return const MainScreen();
+          }
+          return const StartScreen(titleAppBar: "Login");
         },
       ),
       themeMode: ThemeMode.dark,
