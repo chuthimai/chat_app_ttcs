@@ -12,7 +12,8 @@ class ProcessName {
     _standForName = setStandForName(_name);
   }
 
-  String normalizeName(String name) {
+  //TODO: chuan hoa ten
+   normalizeName(String name) {
     // Chuyển tất cả các ký tự thành chữ thường
     String normalized = name.toLowerCase();
 
@@ -38,6 +39,7 @@ class ProcessName {
     return normalized;
   }
 
+  //TODO: viet tat ten (VD: Nguyen Van An => annt)
   String setStandForName(name) {
     List<String> words = name.toLowerCase().split(" ");
     String standForName = words[words.length - 1];

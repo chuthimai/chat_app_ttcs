@@ -1,14 +1,14 @@
 import 'package:chat_app_ttcs/models/data_obj.dart';
 
 class JobTransfer extends DataObj {
-  final int _idJobTransfer;
+  final String _idJobTransfer;
   final int _idNewDepartment;
   final int _idNewPosition;
   final String _idUser;
   DateTime _dateTransfer;
 
   JobTransfer({
-    required int idJobTransfer,
+    required String idJobTransfer,
     required int idNewDepartment,
     required int idNewPosition,
     required String idUser,
@@ -22,7 +22,7 @@ class JobTransfer extends DataObj {
 
   int get idNewDepartment => _idNewDepartment;
 
-  int get idJobTransfer => _idJobTransfer;
+  String get idJobTransfer => _idJobTransfer;
 
   int get idNewPosition => _idNewPosition;
 

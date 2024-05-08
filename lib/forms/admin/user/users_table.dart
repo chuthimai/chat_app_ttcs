@@ -1,7 +1,6 @@
 import 'package:chat_app_ttcs/db/user/show_user_dao.dart';
-import 'package:chat_app_ttcs/forms/admin/user/user_form.dart';
-import 'package:chat_app_ttcs/models/position.dart';
-import 'package:chat_app_ttcs/models/user/user.dart';
+import 'package:chat_app_ttcs/forms/admin/user/new_user_form.dart';
+import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:flutter/material.dart';
 
 class UserTable extends StatefulWidget {
@@ -13,8 +12,8 @@ class UserTable extends StatefulWidget {
 
 class _UserTableState extends State<UserTable> {
   final dbUser = ShowUserDAO();
-  late List<User> allUsers;
-  late List<bool> selected;
+  List<UserData> allUsers = [];
+  List<bool> selected = [];
 
   @override
   void initState() {
@@ -35,15 +34,15 @@ class _UserTableState extends State<UserTable> {
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
-      builder: (cxt) => UserForm(),
+      builder: (cxt) => const NewUserForm(),
     );
   }
 
-  List<DataCell> _showUser(User user) {
+  List<DataCell> _showUser(UserData user) {
     return [
       DataCell(Text(user.fullName)),
       DataCell(Text(user.gender ? "Male" : "Female")),
-      DataCell(Text(user.companyEmail!)),
+      DataCell(Text(user.companyEmail)),
       DataCell(FutureBuilder(
         future: dbUser.getJobTransfer(user.idJobTransfer),
         builder: (context, snapshot) {
@@ -93,10 +92,6 @@ class _UserTableState extends State<UserTable> {
 
   @override
   Widget build(BuildContext context) {
-    if (allUsers == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
@@ -130,7 +125,7 @@ class _UserTableState extends State<UserTable> {
           (int index) => DataRow(
             color: MaterialStateProperty.resolveWith<Color?>(
                 (Set<MaterialState> states) {
-              // Tất cả các dòng sẽ có màu được chọn giống nhau.
+              // Tất cả các dòng được chọn sẽ có màu giống nhau.
               if (states.contains(MaterialState.selected)) {
                 return Theme.of(context).colorScheme.primary.withOpacity(0.08);
               }
@@ -138,7 +133,7 @@ class _UserTableState extends State<UserTable> {
               if (index.isEven) {
                 return Colors.grey.withOpacity(0.3);
               }
-              return null; // Use default value for other states and odd rows.
+              return null;
             }),
             cells: _showUser(allUsers.elementAt(index)),
             selected: selected[index],

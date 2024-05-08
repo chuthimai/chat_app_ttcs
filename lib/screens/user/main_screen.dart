@@ -20,7 +20,7 @@ class MainScreen extends StatelessWidget {
           final role = snapshot.data;
           if (role == 'Admin') {
             return const AdminMainScreen();
-          } else if (role == 'Employee'){
+          } else if (role == 'Normal User'){
             return const ViewListFriendScreen();
           } else return Scaffold();
         }

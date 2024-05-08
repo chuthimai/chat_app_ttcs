@@ -1,4 +1,3 @@
-import 'package:chat_app_ttcs/forms/admin/user/user_form.dart';
 import 'package:chat_app_ttcs/screens/admin/all_groups_screen.dart';
 import 'package:chat_app_ttcs/screens/admin/all_users_screen.dart';
 import 'package:chat_app_ttcs/screens/user/change_password_screen.dart';
@@ -57,7 +56,7 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
                           ),
                         ),
                         subtitle: Text(
-                          "maict.b21cn082@stu.ptit.edu.vn",
+                          FirebaseAuth.instance.currentUser!.email!,
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       )

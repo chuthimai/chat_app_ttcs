@@ -1,5 +1,5 @@
 
-import 'package:chat_app_ttcs/forms/admin/user/user_form.dart';
+import 'package:chat_app_ttcs/forms/admin/user/new_user_form.dart';
 import 'package:flutter/material.dart';
 
 import 'all_groups_screen.dart';
@@ -106,7 +106,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-        child: UserForm(),
+        child: NewUserForm(),
       ),
     );
   }

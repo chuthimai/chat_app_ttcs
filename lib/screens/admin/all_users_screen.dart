@@ -1,5 +1,5 @@
 import 'package:chat_app_ttcs/forms/admin/group/group_form.dart';
-import 'package:chat_app_ttcs/forms/admin/user/user_form.dart';
+import 'package:chat_app_ttcs/forms/admin/user/new_user_form.dart';
 import 'package:chat_app_ttcs/forms/admin/user/users_table.dart';
 import 'package:chat_app_ttcs/forms/search/search.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,7 +20,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
-      builder: (cxt) => const UserForm(),
+      builder: (cxt) => const NewUserForm(),
     );
   }
 
@@ -42,17 +42,17 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
           const SizedBox(
             height: 20,
           ),
-          Search(),
+          const Search(),
           const SizedBox(
             height: 20,
           ),
           Row(
             children: [
-              Spacer(),
+              const Spacer(),
               FloatingActionButton.extended(
                 onPressed: _openNewUserForm,
                 label: const Row(
-                  children: [Icon(Icons.add), Text("Add Acount")],
+                  children: [Icon(Icons.add), Text("Add Account")],
                 ),
               ),
               const SizedBox(

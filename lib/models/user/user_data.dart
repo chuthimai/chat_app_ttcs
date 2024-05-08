@@ -1,18 +1,16 @@
 import 'package:chat_app_ttcs/models/data_obj.dart';
-import 'package:chat_app_ttcs/models/process/process_email.dart';
-import 'package:chat_app_ttcs/models/process/process_name.dart';
 
-class User extends DataObj {
+class UserData extends DataObj {
   final String _idUser;
   String _fullName;
   final bool _gender;
   String _phoneNum;
   String _userEmail;
-  String? _companyEmail;
+  String _companyEmail;
   String _password;
-  int? _idJobTransfer;
+  String? _idJobTransfer;
   String _role;
-  String _avartar = '';
+  String _avatar = '';
   bool _state = true;
 
   bool get state => _state;
@@ -21,10 +19,10 @@ class User extends DataObj {
     _state = value;
   }
 
-  String get avartar => _avartar;
+  String get avatar => _avatar;
 
-  set avartar(String value) {
-    _avartar = value;
+  set avatar(String value) {
+    _avatar = value;
   }
 
   String get fullName => _fullName;
@@ -35,32 +33,29 @@ class User extends DataObj {
 
   String get idUser => _idUser;
 
-  int get idJobTransfer => _idJobTransfer!;
+  String get idJobTransfer => _idJobTransfer!;
 
-  set idJobTransfer(int value) {
+  set idJobTransfer(String value) {
     _idJobTransfer = value;
   }
 
-  User({
+  UserData({
     required String idUser,
     required String fullName,
     bool gender = true,
     required String phoneNum,
     required String userEmail,
+    required String companyEmail,
     required String password,
     required String role,
   })  : _idUser = idUser,
         _role = role,
         _password = password,
         _userEmail = userEmail,
+        _companyEmail = companyEmail,
         _phoneNum = phoneNum,
         _gender = gender,
-        _fullName = fullName {
-    final processName = ProcessName(_fullName);
-    final processEmail = ProcessEmail(processName.standForName);
-    _fullName = processName.name;
-    _companyEmail = processEmail.email;
-  }
+        _fullName = fullName;
 
   String get phoneNum => _phoneNum;
 
@@ -88,17 +83,12 @@ class User extends DataObj {
     _password = value;
   }
 
-  String? get companyEmail => _companyEmail;
-
-
-  set companyEmail(String? value) {
-    _companyEmail = value;
-  }
+  String get companyEmail => _companyEmail;
 
   @override
   Map<String, dynamic> toMap() => {
         'id': _idUser,
-        'avatar': _avartar,
+        'avatar': _avatar,
         'companyEmail': _companyEmail,
         'fullName': _fullName,
         'gender': _gender,
@@ -110,8 +100,8 @@ class User extends DataObj {
         'userEmail': _userEmail
       };
 
-  factory User.toUser(Map<String, dynamic> json) {
-    User user = User(
+  factory UserData.toUser(Map<String, dynamic> json) {
+    UserData user = UserData(
       idUser: json['id'],
       fullName: json['fullName'],
       gender: json['gender'],
@@ -119,10 +109,10 @@ class User extends DataObj {
       userEmail: json['userEmail'],
       password: json['password'],
       role: json['role'],
+      companyEmail: json['companyEmail']
     );
     user.state = json['state'];
-    user.avartar = json['avatar'];
-    user.companyEmail = json['companyEmail'];
+    user.avatar = json['avatar'];
     user.idJobTransfer = json['idJobTransfer'];
 
     return user;
