@@ -1,5 +1,6 @@
 import 'package:chat_app_ttcs/db/user/show_user_dao.dart';
 import 'package:chat_app_ttcs/forms/admin/user/user_form.dart';
+import 'package:chat_app_ttcs/models/position.dart';
 import 'package:chat_app_ttcs/models/user/user.dart';
 import 'package:flutter/material.dart';
 
@@ -40,44 +41,59 @@ class _UserTableState extends State<UserTable> {
 
   List<DataCell> _showUser(User user) {
     return [
-          DataCell(Text(user.fullName)),
-          DataCell(Text(user.gender ? "Male" : "Female")),
-          DataCell(Text(user.companyEmail!)),
-          DataCell(Text("None")),
-          DataCell(Text("None")),
-          DataCell(Text(user.role)),
-          DataCell(Row(
-            children: [
-              ElevatedButton.icon(
-                onPressed: _openNewUserForm,
-                label: const Text("Edit"),
-                icon: const Icon(
-                  Icons.edit,
-                  size: 13,
-                ),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(213, 246, 189, 208)),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              ElevatedButton.icon(
-                onPressed: () {},
-                label: const Text("Delete"),
-                icon: const Icon(
-                  Icons.delete,
-                  size: 13,
-                ),
-              ),
-            ],
-          ))
-        ];
+      DataCell(Text(user.fullName)),
+      DataCell(Text(user.gender ? "Male" : "Female")),
+      DataCell(Text(user.companyEmail!)),
+      DataCell(FutureBuilder(
+        future: dbUser.getJobTransfer(user.idJobTransfer),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          }
+          return Text(snapshot.data!.department.nameDepartment);
+        },
+      )),
+      DataCell(FutureBuilder(
+        future: dbUser.getJobTransfer(user.idJobTransfer),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          }
+          return Text(snapshot.data!.namePosition);
+        },
+      )),
+      DataCell(Text(user.role)),
+      DataCell(Row(
+        children: [
+          ElevatedButton.icon(
+            onPressed: _openNewUserForm,
+            label: const Text("Edit"),
+            icon: const Icon(
+              Icons.edit,
+              size: 13,
+            ),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(213, 246, 189, 208)),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          ElevatedButton.icon(
+            onPressed: () {},
+            label: const Text("Delete"),
+            icon: const Icon(
+              Icons.delete,
+              size: 13,
+            ),
+          ),
+        ],
+      ))
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
-
-    if (allUsers.isEmpty || selected.isEmpty) {
+    if (allUsers == null) {
       return const Center(child: CircularProgressIndicator());
     }
 
@@ -111,14 +127,12 @@ class _UserTableState extends State<UserTable> {
         ],
         rows: List<DataRow>.generate(
           allUsers.length,
-              (int index) => DataRow(
-            color: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
+          (int index) => DataRow(
+            color: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
               // Tất cả các dòng sẽ có màu được chọn giống nhau.
               if (states.contains(MaterialState.selected)) {
-                return Theme.of(context)
-                    .colorScheme
-                    .primary
-                    .withOpacity(0.08);
+                return Theme.of(context).colorScheme.primary.withOpacity(0.08);
               }
               // Các dòng chẵn sẽ có màu xám.
               if (index.isEven) {
