@@ -42,17 +42,17 @@ class _NewUserFormState extends State<NewUserForm> {
     _formKey.currentState!.save(); // thuc hien hanh dong onSave cua Form
 
     final newUserAuth = UserAuth(_enterCompanyEmail, _enterPassword);
-    final _idUser = await _db.createAuthUser(newUserAuth);
-    final _idJobTransfer = uuid.v4();
+    final idUser = await _db.createAuthUser(newUserAuth);
+    final idJobTransfer = uuid.v4();
     final newJobTransfer = JobTransfer(
-      idJobTransfer: _idJobTransfer,
+      idJobTransfer: idJobTransfer,
       idNewDepartment: _enterDepartment.idDepartment,
       idNewPosition: _enterPosition.idPosition,
-      idUser: _idUser,
+      idUser: idUser,
     );
     _db.createJobTransfer(newJobTransfer);
     final newUser = UserData(
-      idUser: _idUser,
+      idUser: idUser,
       fullName: _enterFullName,
       phoneNum: _enterPhoneNumber,
       userEmail: _enterUserEmail,
@@ -60,7 +60,7 @@ class _NewUserFormState extends State<NewUserForm> {
       password: _enterPassword,
       role: _enterRole,
     );
-    newUser.idJobTransfer = _idJobTransfer;
+    newUser.idJobTransfer = idJobTransfer;
     _db.createUser(newUser);
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
@@ -193,7 +193,7 @@ class _NewUserFormState extends State<NewUserForm> {
                   if (value == null) {
                     return "Please enter a valid email address.";
                   } else if (!regex.hasMatch(value)) {
-                    return "Please enter email end with \'@gmail.com\'.";
+                    return "Please enter email end with '@gmail.com'.";
                   }
                   return null;
                 },
