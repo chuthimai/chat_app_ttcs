@@ -7,6 +7,7 @@ import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:chat_app_ttcs/process/process_email.dart';
 import 'package:chat_app_ttcs/process/process_name.dart';
 import 'package:chat_app_ttcs/process/random_password.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -20,6 +21,7 @@ class NewUserForm extends StatefulWidget {
 class _NewUserFormState extends State<NewUserForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _db = ShowUserDAO();
+  late UserData _adminAccount;
   List<Position> allPositions = [];
   late List<String> roles;
   final randomPass = RandomPassword();
@@ -53,7 +55,7 @@ class _NewUserFormState extends State<NewUserForm> {
       idNewPosition: _enterPosition.idPosition,
       idUser: idUser,
     );
-    _db.createJobTransfer(newJobTransfer);
+    await _db.createJobTransfer(newJobTransfer);
 
     // create user in collection "Users"
     final newUser = UserData(
@@ -67,7 +69,15 @@ class _NewUserFormState extends State<NewUserForm> {
       role: _enterRole,
     );
     newUser.idJobTransfer = idJobTransfer;
-    _db.createUser(newUser);
+    await _db.createUser(newUser);
+
+    // Prevent login new account
+    await FirebaseAuth.instance.signOut();
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _adminAccount.companyEmail,
+      password: _adminAccount.password,
+    );
+
     // exit overlay
     Navigator.pop(context);
 
@@ -90,9 +100,14 @@ class _NewUserFormState extends State<NewUserForm> {
     });
   }
 
+  void _getAdminAccount() async {
+    _adminAccount = await _db.getCurrentUser();
+  }
+
   @override
   void initState() {
     _getAllPosition();
+    _getAdminAccount();
     _enterPassword = randomPass.generatePassword(8);
     roles = ['Admin', 'Normal User'];
     super.initState();
@@ -111,8 +126,7 @@ class _NewUserFormState extends State<NewUserForm> {
             children: [
               Text(
                 "User",
-                style: Theme
-                    .of(context)
+                style: Theme.of(context)
                     .textTheme
                     .titleLarge!
                     .copyWith(fontWeight: FontWeight.bold),
@@ -274,11 +288,10 @@ class _NewUserFormState extends State<NewUserForm> {
                   height: 50,
                   child: DropdownButtonFormField(
                     items: roles
-                        .map((e) =>
-                        DropdownMenuItem(
-                          value: e,
-                          child: Text(e),
-                        ))
+                        .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e),
+                            ))
                         .toList(),
                     value: _enterRole,
                     hint: const Text("Role"),

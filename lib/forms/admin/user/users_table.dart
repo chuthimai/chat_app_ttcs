@@ -1,5 +1,7 @@
 import 'package:chat_app_ttcs/db/admin/show_user_dao.dart';
 import 'package:chat_app_ttcs/forms/admin/user/new_user_form.dart';
+import 'package:chat_app_ttcs/models/job_transfer.dart';
+import 'package:chat_app_ttcs/models/position.dart';
 import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:flutter/material.dart';
 
@@ -11,21 +13,39 @@ class UserTable extends StatefulWidget {
 }
 
 class _UserTableState extends State<UserTable> {
-  final dbUser = ShowUserDAO();
-  List<UserData> allUsers = [];
-  List<bool> selected = [];
+  final _dbUser = ShowUserDAO();
+  List<UserData> _allUsers = [];
+  List<Position> _allPositions = [];
+  List<JobTransfer> _allJobTrans = [];
+  List<bool> _selected = [];
 
   @override
   void initState() {
-    super.initState();
     _getAllUsers();
+    _getAllPosition();
+    _getAllJobTransfer();
+    super.initState();
+  }
+
+  void _getAllPosition() async {
+    final positions = await _dbUser.getAllPosition();
+    setState(() {
+      _allPositions = positions.toList();
+    });
+  }
+
+  void _getAllJobTransfer() async {
+    final jobTrans = await _dbUser.getAllJobTransfer();
+    setState(() {
+      _allJobTrans = jobTrans.toList();
+    });
   }
 
   void _getAllUsers() async {
-    final users = await dbUser.getAllUsers();
+    final users = await _dbUser.getAllUsers();
     setState(() {
-      allUsers = users.toList();
-      selected = List<bool>.generate(allUsers.length, (int index) => false);
+      _allUsers = users.toList();
+      _selected = List<bool>.generate(_allUsers.length, (int index) => false);
     });
   }
 
@@ -36,31 +56,21 @@ class _UserTableState extends State<UserTable> {
       context: context,
       builder: (cxt) => const NewUserForm(),
     );
+    _getAllUsers();
+    _getAllJobTransfer();
+
   }
 
   List<DataCell> _showUser(UserData user) {
+    final JobTransfer jobTran = _allJobTrans.where((element) => element.idJobTransfer == user.idJobTransfer).first;
+    final Position position = _allPositions.where((element) => element.idPosition == jobTran.idNewPosition).first;
+
     return [
       DataCell(Text(user.fullName)),
       DataCell(Text(user.gender ? "Male" : "Female")),
       DataCell(Text(user.companyEmail)),
-      DataCell(FutureBuilder(
-        future: dbUser.getJobTransfer(user.idJobTransfer),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          }
-          return Text(snapshot.data!.department.nameDepartment);
-        },
-      )),
-      DataCell(FutureBuilder(
-        future: dbUser.getJobTransfer(user.idJobTransfer),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          }
-          return Text(snapshot.data!.namePosition);
-        },
-      )),
+      DataCell(Text(position.department.nameDepartment)),
+      DataCell(Text(position.namePosition)),
       DataCell(Text(user.role)),
       DataCell(Row(
         children: [
@@ -92,6 +102,9 @@ class _UserTableState extends State<UserTable> {
 
   @override
   Widget build(BuildContext context) {
+    if (_allPositions.isEmpty || _allJobTrans.isEmpty || _allPositions.isEmpty) {
+      return const CircularProgressIndicator();
+    }
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
@@ -121,7 +134,7 @@ class _UserTableState extends State<UserTable> {
           ),
         ],
         rows: List<DataRow>.generate(
-          allUsers.length,
+          _allUsers.length,
           (int index) => DataRow(
             color: MaterialStateProperty.resolveWith<Color?>(
                 (Set<MaterialState> states) {
@@ -135,11 +148,11 @@ class _UserTableState extends State<UserTable> {
               }
               return null;
             }),
-            cells: _showUser(allUsers.elementAt(index)),
-            selected: selected[index],
+            cells: _showUser(_allUsers.elementAt(index)),
+            selected: _selected[index],
             onSelectChanged: (bool? value) {
               setState(() {
-                selected[index] = value!;
+                _selected[index] = value!;
               });
             },
           ),
