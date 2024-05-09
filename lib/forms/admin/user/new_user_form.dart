@@ -60,6 +60,7 @@ class _NewUserFormState extends State<NewUserForm> {
       idUser: idUser,
       fullName: _enterFullName,
       phoneNum: _enterPhoneNumber,
+      gender: _enterGender,
       userEmail: _enterUserEmail,
       companyEmail: _enterCompanyEmail,
       password: _enterPassword,
