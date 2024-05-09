@@ -1,4 +1,4 @@
-import 'package:chat_app_ttcs/db/user/show_user_dao.dart';
+import 'package:chat_app_ttcs/db/admin/show_user_dao.dart';
 import 'package:chat_app_ttcs/forms/admin/user/new_user_form.dart';
 import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:flutter/material.dart';

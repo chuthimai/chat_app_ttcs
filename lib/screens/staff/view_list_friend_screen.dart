@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:chat_app_ttcs/db/user/manage_user_dao.dart';
 import 'package:chat_app_ttcs/forms/staff/all_conversations.dart';
+import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:chat_app_ttcs/screens/user/change_password_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +15,25 @@ class ViewListFriendScreen extends StatefulWidget {
 }
 
 class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
+  final ManageUserDAO manageUserDAO = ManageUserDAO();
+  late UserData _currentUser;
+
+
+  @override
+  void initState() {
+    _getCurrentUser();
+    super.initState();
+  }
+
+  void _getCurrentUser() async {
+    final user = await manageUserDAO.getCurrentUser();
+    _currentUser = user;
+  }
+
   void _selectChangePassword(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (ctx) => ChangePasswordScreen(),
+        builder: (ctx) => const ChangePasswordScreen(),
       ),
     );
   }
@@ -49,7 +66,7 @@ class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
                           onDoubleTap: () {},
                         ),
                         title: Text(
-                          "Chu Thi Mai",
+                          _currentUser.fullName,
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!
@@ -58,7 +75,7 @@ class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
                           ),
                         ),
                         subtitle: Text(
-                          "maict@cp.vn",
+                          _currentUser.companyEmail,
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
@@ -105,7 +122,7 @@ class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-        child: Container(alignment: Alignment.topCenter, child: AllConversations()),
+        child: Container(alignment: Alignment.topCenter, child: const AllConversations()),
       ),
     );
   }

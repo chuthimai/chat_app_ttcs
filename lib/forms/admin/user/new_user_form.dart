@@ -1,4 +1,4 @@
-import 'package:chat_app_ttcs/db/user/show_user_dao.dart';
+import 'package:chat_app_ttcs/db/admin/show_user_dao.dart';
 import 'package:chat_app_ttcs/models/department.dart';
 import 'package:chat_app_ttcs/models/job_transfer.dart';
 import 'package:chat_app_ttcs/models/position.dart';
@@ -41,8 +41,11 @@ class _NewUserFormState extends State<NewUserForm> {
     if (!isValid) return;
     _formKey.currentState!.save(); // thuc hien hanh dong onSave cua Form
 
+    // create account email auth
     final newUserAuth = UserAuth(_enterCompanyEmail, _enterPassword);
     final idUser = await _db.createAuthUser(newUserAuth);
+
+    // create job transfer
     final idJobTransfer = uuid.v4();
     final newJobTransfer = JobTransfer(
       idJobTransfer: idJobTransfer,
@@ -51,6 +54,8 @@ class _NewUserFormState extends State<NewUserForm> {
       idUser: idUser,
     );
     _db.createJobTransfer(newJobTransfer);
+
+    // create user in collection "Users"
     final newUser = UserData(
       idUser: idUser,
       fullName: _enterFullName,
@@ -62,7 +67,11 @@ class _NewUserFormState extends State<NewUserForm> {
     );
     newUser.idJobTransfer = idJobTransfer;
     _db.createUser(newUser);
+    // exit overlay
     Navigator.pop(context);
+
+    // show notification add new users successfully
+    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         duration: Duration(seconds: 3),
