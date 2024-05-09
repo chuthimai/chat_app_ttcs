@@ -14,7 +14,7 @@ class _AllConversationsState extends State<AllConversations> {
   void _selectConversation(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (ctx) => DetailConversationScreen(),
+        builder: (ctx) => const DetailConversationScreen(),
       ),
     );
   }
