@@ -1,3 +1,5 @@
+import 'package:chat_app_ttcs/db/user/change_password_dao.dart';
+import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:flutter/material.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -12,7 +14,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   String _enterOldPassword = '';
   String _enterNewPassword = '';
   String _enterConfirmNewPassword = '';
-  final ChangePasswordDao _changePasswordDAO = ChangePasswordDao();
+  final ChangePasswordDAO _changePasswordDAO = ChangePasswordDAO();
   late UserData user;
 
   @override
