@@ -17,7 +17,7 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
   void _selectChangePassword(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (ctx) => ChangePasswordScreen(),
+        builder: (ctx) => const ChangePasswordScreen(),
       ),
     );
   }

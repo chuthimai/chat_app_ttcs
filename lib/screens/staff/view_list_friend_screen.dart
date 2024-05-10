@@ -16,8 +16,7 @@ class ViewListFriendScreen extends StatefulWidget {
 
 class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
   final ManageUserDAO manageUserDAO = ManageUserDAO();
-  late UserData _currentUser;
-
+  UserData? _currentUser;
 
   @override
   void initState() {
@@ -27,7 +26,9 @@ class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
 
   void _getCurrentUser() async {
     final user = await manageUserDAO.getCurrentUser();
-    _currentUser = user;
+    setState(() {
+      _currentUser = user;
+    });
   }
 
   void _selectChangePassword(BuildContext context) {
@@ -40,6 +41,11 @@ class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_currentUser == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text("Conversations"),
@@ -61,21 +67,22 @@ class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
                           child: CircleAvatar(
                             radius: 26,
                             backgroundColor: Colors.black,
-                            foregroundImage: FileImage(File("assets/images/avatar_default.png")),
+                            foregroundImage: FileImage(
+                                File("assets/images/avatar_default.png")),
                           ),
                           onDoubleTap: () {},
                         ),
                         title: Text(
-                          _currentUser.fullName,
+                          _currentUser!.fullName,
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!
                               .copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
                         subtitle: Text(
-                          _currentUser.companyEmail,
+                          _currentUser!.companyEmail,
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
@@ -122,7 +129,8 @@ class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-        child: Container(alignment: Alignment.topCenter, child: const AllConversations()),
+        child: Container(
+            alignment: Alignment.topCenter, child: const AllConversations()),
       ),
     );
   }
