@@ -58,12 +58,15 @@ class _UserTableState extends State<UserTable> {
     );
     _getAllUsers();
     _getAllJobTransfer();
-
   }
 
   List<DataCell> _showUser(UserData user) {
-    final JobTransfer jobTran = _allJobTrans.where((element) => element.idJobTransfer == user.idJobTransfer).first;
-    final Position position = _allPositions.where((element) => element.idPosition == jobTran.idNewPosition).first;
+    final JobTransfer jobTran = _allJobTrans
+        .where((element) => element.idJobTransfer == user.idJobTransfer)
+        .first;
+    final Position position = _allPositions
+        .where((element) => element.idPosition == jobTran.idNewPosition)
+        .first;
 
     return [
       DataCell(Text(user.fullName)),
@@ -102,7 +105,9 @@ class _UserTableState extends State<UserTable> {
 
   @override
   Widget build(BuildContext context) {
-    if (_allPositions.isEmpty || _allJobTrans.isEmpty || _allPositions.isEmpty) {
+    if (_allPositions.isEmpty ||
+        _allJobTrans.isEmpty ||
+        _allPositions.isEmpty) {
       return const CircularProgressIndicator();
     }
     return SingleChildScrollView(

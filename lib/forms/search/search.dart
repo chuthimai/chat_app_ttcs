@@ -32,19 +32,23 @@ class _SearchUserState extends State<SearchUser> {
   Widget build(BuildContext context) {
     return SearchAnchor(
       builder: (BuildContext context, SearchController controller) {
+        // print('lol ---> 0. _allNormalUser = $_allNormalUser');
         if (_allNormalUser.isEmpty) return const CircularProgressIndicator();
+        // print('lol ---> 1.');
         return SearchBar(
           controller: controller,
           hintText: "Search",
           padding: const MaterialStatePropertyAll<EdgeInsets>(
               EdgeInsets.symmetric(horizontal: 16.0)),
           onSubmitted: (value) {
+            // print('lol ---> 2.');
             setState(() {
               _searchNormalUser = _allNormalUser
                   .where((element) => element.fullName
                       .toLowerCase()
                       .contains(value.trim().toLowerCase()))
                   .toList();
+              // print('lol ---> 3. _searchNormalUser = $_searchNormalUser');
             });
             controller.openView();
           },
