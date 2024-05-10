@@ -41,30 +41,36 @@ class MyApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-              foregroundColor: const Color.fromARGB(255, 222, 36, 96),
-            )),
+          foregroundColor: const Color.fromARGB(255, 222, 36, 96),
+        )),
         dataTableTheme: const DataTableThemeData(
           headingTextStyle: TextStyle(fontWeight: FontWeight.bold),
           dataTextStyle: TextStyle(fontWeight: FontWeight.w400),
         ),
+        listTileTheme: const ListTileThemeData(
+          contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        ),
       ),
       theme: ThemeData().copyWith(
-          colorScheme: kColorScheme,
-          appBarTheme: const AppBarTheme().copyWith(
-            backgroundColor: const Color.fromARGB(255, 236, 119, 159),
-            titleTextStyle: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w500,
-              fontSize: 20,
-            ),
+        colorScheme: kColorScheme,
+        appBarTheme: const AppBarTheme().copyWith(
+          backgroundColor: const Color.fromARGB(255, 236, 119, 159),
+          titleTextStyle: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
           ),
-          dataTableTheme: const DataTableThemeData(
-            headingTextStyle: TextStyle(fontWeight: FontWeight.bold),
-            dataTextStyle: TextStyle(fontWeight: FontWeight.w400),
-          ),
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            extendedTextStyle: TextStyle(fontSize: 16),
-          )
+        ),
+        dataTableTheme: const DataTableThemeData(
+          headingTextStyle: TextStyle(fontWeight: FontWeight.bold),
+          dataTextStyle: TextStyle(fontWeight: FontWeight.w400),
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          extendedTextStyle: TextStyle(fontSize: 16),
+        ),
+        listTileTheme: const ListTileThemeData(
+          contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        ),
       ),
       home: StreamBuilder(
         // tao 1 ma xac thuc cho 1 phien dang nhap
@@ -73,7 +79,7 @@ class MyApp extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
 
         // Hàm này được gọi mỗi khi có một sự thay đổi trong luồng dữ liệu
-        builder: (cxt, snapshot)  {
+        builder: (cxt, snapshot) {
           if (snapshot.hasData) {
             return const MainScreen();
           }

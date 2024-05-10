@@ -11,7 +11,7 @@ class ManageUserDAO {
     final users = await _db.collection('Users').get().then((value) {
       return value.docs.map((e) {
         return UserData.toUser(e.data());
-      });
+      }).where((element) => element.state);
     });
 
     return users.toList();

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:chat_app_ttcs/db/user/manage_user_dao.dart';
+import 'package:chat_app_ttcs/forms/search/search.dart';
 import 'package:chat_app_ttcs/forms/staff/all_conversations.dart';
 import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:chat_app_ttcs/screens/user/change_password_screen.dart';
@@ -127,10 +128,19 @@ class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+      body: const Padding(
+        padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
         child: Align(
-            alignment: Alignment.topCenter, child: const AllConversations()),
+            alignment: Alignment.topCenter,
+            child: Column(
+              children: [
+                SearchUser(),
+                SizedBox(
+                  height: 20,
+                ),
+                AllConversations(),
+              ],
+            )),
       ),
     );
   }

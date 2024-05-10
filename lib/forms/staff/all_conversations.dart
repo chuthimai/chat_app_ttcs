@@ -21,22 +21,59 @@ class _AllConversationsState extends State<AllConversations> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ListView.builder(
-        itemCount: 1,
-        itemBuilder: (ctx, index) {
-          return ListTile(
-            leading: CircleAvatar(
-              radius: 26,
-              foregroundImage:
-                  FileImage(File("assets/images/avatar_default.png")),
+    return Expanded(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            ListTile(
+              leading: CircleAvatar(
+                radius: 26,
+                foregroundImage:
+                    FileImage(File("assets/images/avatar_default.png")),
+              ),
+              title: Text(
+                "Conversation A",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+              onTap: () {
+                _selectConversation(context);
+              },
             ),
-            title: Text("Conversation A", style: Theme.of(context).textTheme.titleMedium,),
-            onTap: () {
-              _selectConversation(context);
-            },
-          );
-        },
+            ListTile(
+              leading: CircleAvatar(
+                radius: 26,
+                foregroundImage:
+                FileImage(File("assets/images/avatar_default.png")),
+              ),
+              title: Text(
+                "Conversation A",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              onTap: () {
+                _selectConversation(context);
+              },
+            ),
+            ListTile(
+              leading: CircleAvatar(
+                radius: 26,
+                foregroundImage:
+                FileImage(File("assets/images/avatar_default.png")),
+              ),
+              title: Text(
+                "Conversation A",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              contentPadding:
+              const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+              onTap: () {
+                _selectConversation(context);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

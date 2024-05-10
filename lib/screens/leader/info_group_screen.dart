@@ -40,7 +40,7 @@ class InfoGroupScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
         child: Column(
           children: [
-            Search(),
+            SearchUser(),
             SizedBox(height: 16,),
             ListTile(
               title: Text(

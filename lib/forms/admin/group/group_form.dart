@@ -71,7 +71,7 @@ class _GroupFormState extends State<GroupForm> {
               const SizedBox(
                 height: 16,
               ),
-              const Search(),
+              const SearchUser(),
               const SizedBox(
                 height: 16,
               ),

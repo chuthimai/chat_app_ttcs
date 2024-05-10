@@ -21,7 +21,7 @@ class _AllGroupScreenState extends State<AllGroupScreen> {
           const SizedBox(
             height: 20,
           ),
-          Search(),
+          SearchUser(),
           const SizedBox(
             height: 20,
           ),

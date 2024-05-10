@@ -42,7 +42,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
           const SizedBox(
             height: 20,
           ),
-          const Search(),
+          const SearchUser(),
           const SizedBox(
             height: 20,
           ),
