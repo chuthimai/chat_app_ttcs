@@ -129,7 +129,7 @@ class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-        child: Container(
+        child: Align(
             alignment: Alignment.topCenter, child: const AllConversations()),
       ),
     );

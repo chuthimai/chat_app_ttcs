@@ -2,8 +2,6 @@ import 'package:chat_app_ttcs/db/user/manage_user_dao.dart';
 import 'package:chat_app_ttcs/models/department.dart';
 import 'package:chat_app_ttcs/models/job_transfer.dart';
 import 'package:chat_app_ttcs/models/position.dart';
-import 'package:chat_app_ttcs/models/user/user_auth.dart';
-import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -12,16 +10,6 @@ class ShowUserDAO extends ManageUserDAO{
   final _firebaseAuth = FirebaseAuth.instance;
 
   ShowUserDAO();
-
-  Future<List<UserData>> getAllUsers() async {
-    final users = await _db.collection('Users').get().then((value) {
-      return value.docs.map((e) {
-        return UserData.toUser(e.data());
-      });
-    });
-
-    return users.toList();
-  }
 
   Future<List<Position>> getAllPosition() async {
     final positions = await _db.collection('Position').get().then((value) {
@@ -76,18 +64,4 @@ class ShowUserDAO extends ManageUserDAO{
         .set(jobTransfer.toMap(), SetOptions(merge: true));
   }
 
-  Future<String> createAuthUser(UserAuth user) async {
-    final id = await _firebaseAuth
-        .createUserWithEmailAndPassword(
-            email: user.email, password: user.password)
-        .then((value) => value.user!.uid);
-    return id;
-  }
-
-  Future<void> createUser(UserData user) async {
-    await _db
-        .collection('Users')
-        .doc(user.idUser)
-        .set(user.toMap(), SetOptions(merge: true));
-  }
 }

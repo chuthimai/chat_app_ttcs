@@ -30,8 +30,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('===> $_role');
-    print('---> ${FirebaseAuth.instance.currentUser}');
     if (_role == '' || FirebaseAuth.instance.currentUser == null) {
       return const Center(
         child: CircularProgressIndicator(),
