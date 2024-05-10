@@ -1,16 +1,29 @@
-class Message {
-  final int _idMessage;
-  final int _idConversation;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
+
+Uuid uuid = const Uuid();
+
+class Message{
+  String _idMessage = uuid.v8();
+  final String _idConversation;
   final String _idUserSend;
-  final DateTime _timeSend = DateTime.now();
+  Timestamp _timeSend = Timestamp.now();
 
-  Message(this._idMessage, this._idConversation, this._idUserSend);
+  Message(this._idConversation, this._idUserSend);
 
-  DateTime get timeSend => _timeSend;
+  set idMessage(String value) {
+    _idMessage = value;
+  }
+
+  set timeSend(Timestamp value) {
+    _timeSend = value;
+  }
+
+  Timestamp get timeSend => _timeSend;
 
   String get idUserSend => _idUserSend;
 
-  int get idConversation => _idConversation;
+  String get idConversation => _idConversation;
 
-  int get idMessage => _idMessage;
+  String get idMessage => _idMessage;
 }

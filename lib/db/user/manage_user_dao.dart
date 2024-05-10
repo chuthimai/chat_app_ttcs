@@ -17,6 +17,13 @@ class ManageUserDAO {
     return users.toList();
   }
 
+  Future<List<UserData>> getAllNormalUsers() async {
+    final users = await getAllUsers();
+    final normalUsers = users.where((element) => element.role == "Normal User");
+
+    return normalUsers.toList();
+  }
+
   Future<UserData> getCurrentUser() async {
     final user = await _db
         .collection("Users")

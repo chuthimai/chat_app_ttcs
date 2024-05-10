@@ -1,5 +1,5 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NewMessage extends StatefulWidget {
@@ -10,7 +10,7 @@ class NewMessage extends StatefulWidget {
 }
 
 class _NewMessageState extends State<NewMessage> {
-  var _messageController = TextEditingController();
+  final _messageController = TextEditingController();
 
 
   @override
@@ -52,7 +52,7 @@ class _NewMessageState extends State<NewMessage> {
         children: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.image),
+            icon: const Icon(Icons.image),
             color: Theme
                 .of(context)
                 .colorScheme
@@ -60,7 +60,7 @@ class _NewMessageState extends State<NewMessage> {
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.keyboard_voice),
+            icon: const Icon(Icons.keyboard_voice),
             color: Theme
                 .of(context)
                 .colorScheme
@@ -75,7 +75,7 @@ class _NewMessageState extends State<NewMessage> {
           )),
           IconButton(
             onPressed: _submitMessage,
-            icon: Icon(Icons.send),
+            icon: const Icon(Icons.send),
             color: Theme
                 .of(context)
                 .colorScheme
