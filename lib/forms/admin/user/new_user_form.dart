@@ -51,7 +51,6 @@ class _NewUserFormState extends State<NewUserForm> {
     final idJobTransfer = uuid.v4();
     final newJobTransfer = JobTransfer(
       idJobTransfer: idJobTransfer,
-      idNewDepartment: _enterDepartment.idDepartment,
       idNewPosition: _enterPosition.idPosition,
       idUser: idUser,
     );
