@@ -3,6 +3,7 @@ import 'package:chat_app_ttcs/db/staff/manage_conversation_dao.dart';
 import 'package:chat_app_ttcs/models/attending_conversation.dart';
 import 'package:chat_app_ttcs/models/conversation.dart';
 import 'package:chat_app_ttcs/screens/staff/detail_conversation_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -20,22 +21,14 @@ class _AllConversationsState extends State<AllConversations> {
   List<AttendingConversation>? _allAttendingConversation;
   List<Map<String, String>>? _nameAllConversation;
 
-  @override
-  void initState() {
-    _getAllConversation();
-    _getAllAttendingConversation();
-    _mapConversation();
-    super.initState();
-  }
-
-  Future<void> _getAllConversation() async {
+  void _getAllConversation() async {
     final conversation = await _manageConversation.getAllConversation();
     setState(() {
       _allConversation = conversation.toList();
     });
   }
 
-  Future<void> _getAllAttendingConversation() async {
+  void _getAllAttendingConversation() async {
     final attCon =
         await _manageConversation.getAllAttendingConversationOfUser();
     setState(() {
@@ -43,9 +36,9 @@ class _AllConversationsState extends State<AllConversations> {
     });
   }
 
-  Future<void> _mapConversation() async {
-    await _getAllConversation();
-    await _getAllAttendingConversation();
+  void _mapConversation() async {
+    _getAllConversation();
+    _getAllAttendingConversation();
     final nameAllConDoc = _allAttendingConversation!.map((e) async {
       final conversation = _allConversation!
           .where((element) => element.idConversation == e.idConversation)
@@ -90,48 +83,44 @@ class _AllConversationsState extends State<AllConversations> {
 
   @override
   Widget build(BuildContext context) {
-    if (_nameAllConversation == null) {
-      return const Expanded(
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
-    if (_nameAllConversation!.isEmpty) {
-      return const Expanded(
-        child: Center(
-          child: Text("No conversation found."),
-        ),
-      );
-    }
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        children: [
-          ..._nameAllConversation!.map((conversation) {
-            return ListTile(
-              leading: CircleAvatar(
-                radius: 26,
-                backgroundImage: NetworkImage(conversation['avatar']!),
-              ),
-              title: Text(
-                conversation['nameConversation']!,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              subtitle: Text(
-                conversation['subtitle']!,
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-              onTap: () {
-                _selectConversation(context, conversation);
-              },
-            );
-          }),
-        ],
-      ),
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection("AttendingConversation")
+          .where('idUser')
+          .snapshots(),
+      builder: (context, snapshot) {
+        _mapConversation();
+        return Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: [
+                ..._nameAllConversation!.map((conversation) {
+                  return ListTile(
+                    leading: CircleAvatar(
+                      radius: 26,
+                      backgroundImage: NetworkImage(conversation['avatar']!),
+                    ),
+                    title: Text(
+                      conversation['nameConversation']!,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    subtitle: Text(
+                      conversation['subtitle']!,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                    onTap: () {
+                      _selectConversation(context, conversation);
+                    },
+                  );
+                }),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
