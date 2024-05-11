@@ -5,8 +5,10 @@ import 'package:chat_app_ttcs/forms/search/search.dart';
 import 'package:chat_app_ttcs/forms/staff/all_conversations.dart';
 import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:chat_app_ttcs/screens/user/change_password_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ViewListFriendScreen extends StatefulWidget {
   const ViewListFriendScreen({super.key});
@@ -16,7 +18,7 @@ class ViewListFriendScreen extends StatefulWidget {
 }
 
 class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
-  final ManageUserDAO manageUserDAO = ManageUserDAO();
+  final ManageUserDAO _manageUserDAO = ManageUserDAO();
   UserData? _currentUser;
 
   @override
@@ -25,8 +27,8 @@ class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
     super.initState();
   }
 
-  void _getCurrentUser() async {
-    final user = await manageUserDAO.getCurrentUser();
+  Future<void> _getCurrentUser() async {
+    final user = await _manageUserDAO.getCurrentUser();
     setState(() {
       _currentUser = user;
     });
@@ -38,6 +40,23 @@ class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
         builder: (ctx) => const ChangePasswordScreen(),
       ),
     );
+  }
+
+  void _takeAvatar() async {
+    File? selectedImage;
+    final imagePicker = ImagePicker();
+    final pickedImage = await imagePicker.pickImage(
+      source: ImageSource.gallery, // mo thu vien anh de chon
+      maxWidth: 600,
+    );
+    if (pickedImage == null) return;
+    selectedImage = File(pickedImage.path); // chuyen XFile ve File
+    _manageUserDAO.saveAvatarImage(selectedImage);
+    await _getCurrentUser();
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("Successfully updated profile picture"),
+    ));
   }
 
   @override
@@ -64,12 +83,34 @@ class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ListTile(
-                        leading: InkWell(
-                          child: CircleAvatar(
-                            radius: 26,
-                            backgroundImage: NetworkImage(_currentUser!.avatar),
-                          ),
-                          onDoubleTap: () {},
+                        leading: StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection("Users")
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+
+                            if (!snapshot.hasData) {
+                              return const Center(
+                                child: Text("No messages found."),
+                              );
+                            }
+                            final currentUserSnapshot = snapshot.data!.data();
+                            final currentUser = UserData.toUser(currentUserSnapshot!);
+
+                            return InkWell(
+                              onDoubleTap: _takeAvatar,
+                              child: CircleAvatar(
+                                radius: 26,
+                                backgroundImage:
+                                    NetworkImage(currentUser.avatar),
+                              ),
+                            );
+                          },
                         ),
                         title: Text(
                           _currentUser!.fullName,

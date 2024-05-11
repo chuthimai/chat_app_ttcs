@@ -1,11 +1,18 @@
+import 'dart:io';
+
 import 'package:chat_app_ttcs/models/user/user_auth.dart';
 import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ManageUserDAO {
   final _firebaseAuth = FirebaseAuth.instance;
   final _db = FirebaseFirestore.instance;
+  final _firebaseStorage = FirebaseStorage.instance
+      .ref()
+      .child('avatar')
+      .child('${FirebaseAuth.instance.currentUser!.uid}.png');
 
   Future<List<UserData>> getAllUsers() async {
     final users = await _db.collection('Users').get().then((value) {
@@ -36,7 +43,7 @@ class ManageUserDAO {
   Future<String> createAuthUser(UserAuth user) async {
     final id = await _firebaseAuth
         .createUserWithEmailAndPassword(
-        email: user.email, password: user.password)
+            email: user.email, password: user.password)
         .then((value) => value.user!.uid);
     return id;
   }
@@ -46,5 +53,14 @@ class ManageUserDAO {
         .collection('Users')
         .doc(user.idUser)
         .set(user.toMap(), SetOptions(merge: true));
+  }
+
+  void saveAvatarImage(File file) async {
+    await _firebaseStorage.putFile(file);
+    final imageURL = await _firebaseStorage.getDownloadURL();
+    await _db
+        .collection('Users')
+        .doc(_firebaseAuth.currentUser!.uid)
+        .update({'avatar': imageURL});
   }
 }
