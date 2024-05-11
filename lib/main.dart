@@ -86,7 +86,7 @@ class MyApp extends StatelessWidget {
           return const StartScreen(titleAppBar: "Login");
         },
       ),
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.system,
     );
   }
 }
