@@ -1,5 +1,5 @@
 import 'package:chat_app_ttcs/db/admin/show_user_dao.dart';
-import 'package:chat_app_ttcs/forms/admin/user/new_user_form.dart';
+import 'package:chat_app_ttcs/forms/admin/user/edit_user_form.dart';
 import 'package:chat_app_ttcs/models/job_transfer.dart';
 import 'package:chat_app_ttcs/models/position.dart';
 import 'package:chat_app_ttcs/models/user/user_data.dart';
@@ -56,15 +56,13 @@ class _UserTableState extends State<UserTable> {
     });
   }
 
-  void _openNewUserForm() {
+  void _openEditUserForm(UserData user) {
     showModalBottomSheet(
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
-      builder: (cxt) => const NewUserForm(),
+      builder: (cxt) => EditUserForm(user: user),
     );
-    _getAllUsers();
-    _getAllJobTransfer();
   }
 
   List<DataCell> _showUser(UserData user) {
@@ -85,7 +83,9 @@ class _UserTableState extends State<UserTable> {
       DataCell(Row(
         children: [
           ElevatedButton.icon(
-            onPressed: _openNewUserForm,
+            onPressed: () {
+              _openEditUserForm(user);
+            },
             label: const Text("Edit"),
             icon: const Icon(
               Icons.edit,
@@ -115,7 +115,10 @@ class _UserTableState extends State<UserTable> {
     return StreamBuilder(
       stream: FirebaseFirestore.instance.collection("Users").snapshots(),
       builder: (context, snapshot) {
-        if (_allUsers.isEmpty || _allJobTrans.isEmpty || _allPositions.isEmpty) {
+        if (_allUsers.isEmpty ||
+            _allJobTrans.isEmpty ||
+            _allPositions.isEmpty ||
+            !snapshot.hasData) {
           return const Center(
             child: CircularProgressIndicator(),
           );

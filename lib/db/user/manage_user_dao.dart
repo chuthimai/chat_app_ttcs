@@ -55,6 +55,13 @@ class ManageUserDAO {
         .set(user.toMap(), SetOptions(merge: true));
   }
 
+  Future<void> updateUser(UserData user) async {
+    await _db
+        .collection('Users')
+        .doc(user.idUser)
+        .set(user.toMap(), SetOptions(merge: true));
+  }
+
   void saveAvatarImage(File file) async {
     await _firebaseStorage.putFile(file);
     final imageURL = await _firebaseStorage.getDownloadURL();

@@ -1,30 +1,29 @@
 import 'package:chat_app_ttcs/db/admin/show_user_dao.dart';
+import 'package:chat_app_ttcs/db/user/change_password_dao.dart';
 import 'package:chat_app_ttcs/models/department.dart';
 import 'package:chat_app_ttcs/models/job_transfer.dart';
 import 'package:chat_app_ttcs/models/position.dart';
-import 'package:chat_app_ttcs/models/user/user_auth.dart';
 import 'package:chat_app_ttcs/models/user/user_data.dart';
-import 'package:chat_app_ttcs/process/process_email.dart';
-import 'package:chat_app_ttcs/process/process_name.dart';
-import 'package:chat_app_ttcs/process/random_password.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-class NewUserForm extends StatefulWidget {
-  const NewUserForm({super.key});
+class EditUserForm extends StatefulWidget {
+  final UserData user;
+
+  const EditUserForm({required this.user, super.key});
 
   @override
-  State<NewUserForm> createState() => _NewUserFormState();
+  State<EditUserForm> createState() => _EditUserFormState();
 }
 
-class _NewUserFormState extends State<NewUserForm> {
+class _EditUserFormState extends State<EditUserForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _db = ShowUserDAO();
   late UserData _adminAccount;
   List<Position> _allPositions = [];
   final List<String> _roles = ['Admin', 'Normal User'];
-  final randomPass = RandomPassword();
+  late Position _currentPosition;
   final uuid = const Uuid();
 
   //TODO: bien nhap form
@@ -34,52 +33,68 @@ class _NewUserFormState extends State<NewUserForm> {
   String _enterUserEmail = '';
   String _enterCompanyEmail = '';
   late String _enterPassword;
-  late Department _enterDepartment;
-  late Position _enterPosition;
-  late String _enterRole = _roles[1];
+  Department? _enterDepartment;
+  Position? _enterPosition;
+  late String _enterRole;
 
   @override
   void initState() {
     _getAllPosition();
+    _getCurrentPosition();
     _getAdminAccount();
-    _enterPassword = randomPass.generatePassword(8);
+    _enterFullName = widget.user.fullName;
+    _enterGender = widget.user.gender;
+    _enterPhoneNumber = widget.user.phoneNum;
+    _enterUserEmail = widget.user.userEmail;
+    _enterCompanyEmail = widget.user.companyEmail;
+    _enterPassword = widget.user.password;
+    _enterRole = widget.user.role;
+
     super.initState();
   }
 
-  void _getAllPosition() async {
-    final positions = await _db.getAllPosition();
-    setState(() {
-      _allPositions = positions.toList();
-      _enterPosition = positions[0];
-      _enterDepartment = _enterPosition.department;
-    });
-  }
-
-  void _getAdminAccount() async {
-    _adminAccount = await _db.getCurrentUser();
-  }
-
-  void _clickSave() async {
+  void _clickUpdate() async {
     final isValid = _formKey.currentState!.validate(); // KQ chay xac thuc
     if (!isValid) return;
     _formKey.currentState!.save(); // thuc hien hanh dong onSave cua Form
 
-    // create account email auth
-    final newUserAuth = UserAuth(_enterCompanyEmail, _enterPassword);
-    final idUser = await _db.createAuthUser(newUserAuth);
+    // xu ly khi mat khau thay doi
+    if (widget.user.password.compareTo(_enterPassword) != 0) {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: widget.user.companyEmail,
+        password: widget.user.password,
+      );
 
-    // create job transfer
-    final idJobTransfer = uuid.v4();
-    final newJobTransfer = JobTransfer(
-      idJobTransfer: idJobTransfer,
-      idNewPosition: _enterPosition.idPosition,
-      idUser: idUser,
-    );
-    await _db.createJobTransfer(newJobTransfer);
+      final changePassword = ChangePasswordDAO();
+      await changePassword.changePassword(_enterPassword);
+
+      // Prevent login new account
+      await FirebaseAuth.instance.signOut();
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _adminAccount.companyEmail,
+        password: _adminAccount.password,
+      );
+    }
+
+    String idJT = '';
+
+    // xu ly khi vi tri cong viec thay doi
+    if (_currentPosition.idPosition != _enterPosition!.idPosition) {
+      final idJobTransfer = uuid.v4();
+      final newJobTransfer = JobTransfer(
+        idJobTransfer: idJobTransfer,
+        idNewPosition: _enterPosition!.idPosition,
+        idUser: widget.user.idUser,
+      );
+      await _db.createJobTransfer(newJobTransfer);
+      idJT = idJobTransfer;
+    } else {
+      idJT = widget.user.idJobTransfer;
+    }
 
     // create user in collection "Users"
-    final newUser = UserData(
-      idUser: idUser,
+    final user = UserData(
+      idUser: widget.user.idUser,
       fullName: _enterFullName,
       phoneNum: _enterPhoneNumber,
       gender: _enterGender,
@@ -88,15 +103,9 @@ class _NewUserFormState extends State<NewUserForm> {
       password: _enterPassword,
       role: _enterRole,
     );
-    newUser.idJobTransfer = idJobTransfer;
-    await _db.createUser(newUser);
-
-    // Prevent login new account
-    await FirebaseAuth.instance.signOut();
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _adminAccount.companyEmail,
-      password: _adminAccount.password,
-    );
+    user.idJobTransfer = idJT;
+    print(user.toMap());
+    await _db.updateUser(user);
 
     // exit overlay
     Navigator.pop(context);
@@ -106,14 +115,34 @@ class _NewUserFormState extends State<NewUserForm> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         duration: Duration(seconds: 3),
-        content: Text('Add new users successfully.'),
+        content: Text('Update users successfully.'),
       ),
     );
   }
 
+  void _getAllPosition() async {
+    final positions = await _db.getAllPosition();
+    setState(() {
+      _allPositions = positions.toList();
+    });
+  }
+
+  void _getCurrentPosition() async {
+    final currentJobTran = await _db.getPosition(widget.user.idJobTransfer);
+    setState(() {
+      _currentPosition = _allPositions.where((element) => element.idPosition == currentJobTran.idPosition).first;
+      _enterPosition = _currentPosition;
+      _enterDepartment = _enterPosition!.department;
+    });
+  }
+
+  void _getAdminAccount() async {
+    _adminAccount = await _db.getCurrentUser();
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (_allPositions.isEmpty) return const Center(child: CircularProgressIndicator());
+    if (_allPositions.isEmpty) return const CircularProgressIndicator();
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 40),
@@ -123,7 +152,7 @@ class _NewUserFormState extends State<NewUserForm> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "User",
+                "Edit User",
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!
@@ -132,24 +161,15 @@ class _NewUserFormState extends State<NewUserForm> {
               const SizedBox(height: 30),
               TextFormField(
                 maxLength: 50,
-                keyboardType: TextInputType.name,
+                initialValue: widget.user.fullName,
+                readOnly: true,
                 decoration: const InputDecoration(
                   label: Text("Full Name"),
                   border: OutlineInputBorder(),
+                  filled: true,
                 ),
-                textCapitalization: TextCapitalization.words,
                 onSaved: (value) async {
-                  final processName = ProcessName(value!);
-                  _enterFullName = processName.name;
-                  final processEmail = ProcessEmail(processName.standForName);
-                  await processEmail.initialize();
-                  _enterCompanyEmail = processEmail.email;
-                },
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter a valid user\'s name.';
-                  }
-                  return null;
+                  _enterFullName = value!;
                 },
               ),
               SizedBox(
@@ -166,17 +186,15 @@ class _NewUserFormState extends State<NewUserForm> {
                         child: Text("Male"),
                       ),
                     ],
-                    value: _enterGender,
-                    hint: const Text("Gender"),
+                    value: widget.user.gender,
                     onChanged: (value) {
                       _enterGender = value!;
                     },
                   )),
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               TextFormField(
                 maxLength: 50,
+                initialValue: widget.user.phoneNum,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   label: Text("Phone Number"),
@@ -203,6 +221,7 @@ class _NewUserFormState extends State<NewUserForm> {
                 maxLength: 50,
                 keyboardType: TextInputType.emailAddress,
                 autocorrect: false,
+                initialValue: widget.user.userEmail,
                 decoration: const InputDecoration(
                   label: Text("User Email"),
                   border: OutlineInputBorder(),
@@ -222,26 +241,31 @@ class _NewUserFormState extends State<NewUserForm> {
               ),
               TextFormField(
                 readOnly: true,
-                initialValue: "example@cp.vn",
+                initialValue: widget.user.companyEmail,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "Company Email",
                   filled: true,
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               TextFormField(
                 maxLength: 50,
-                initialValue: _enterPassword,
+                initialValue: widget.user.password,
                 keyboardType: TextInputType.text,
-                readOnly: true,
                 decoration: const InputDecoration(
                   label: Text("Password"),
                   border: OutlineInputBorder(),
-                  filled: true,
                 ),
+                validator: (value) {
+                  if (value!.length < 6) {
+                    return "Password has at least 6 characters.";
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _enterPassword = value!;
+                },
               ),
               SizedBox(
                 width: double.infinity,
@@ -250,8 +274,7 @@ class _NewUserFormState extends State<NewUserForm> {
                   readOnly: true,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    // labelText: "Department",
-                    hintText: _enterDepartment.nameDepartment,
+                    hintText: _enterDepartment?.nameDepartment,
                     filled: true,
                   ),
                 ),
@@ -274,7 +297,7 @@ class _NewUserFormState extends State<NewUserForm> {
                     onChanged: (value) {
                       setState(() {
                         _enterPosition = value!;
-                        _enterDepartment = _enterPosition.department;
+                        _enterDepartment = _enterPosition!.department;
                       });
                     },
                   )),
@@ -291,7 +314,7 @@ class _NewUserFormState extends State<NewUserForm> {
                               child: Text(e),
                             ))
                         .toList(),
-                    value: _enterRole,
+                    value: widget.user.role,
                     hint: const Text("Role"),
                     onChanged: (value) {
                       setState(() {
@@ -306,11 +329,11 @@ class _NewUserFormState extends State<NewUserForm> {
                 children: [
                   const Spacer(),
                   ElevatedButton(
-                    onPressed: _clickSave,
+                    onPressed: _clickUpdate,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(213, 246, 189, 208),
                     ),
-                    child: const Text("Save"),
+                    child: const Text("Update"),
                   ),
                   const SizedBox(
                     width: 20,
