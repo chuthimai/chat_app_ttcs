@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-// A MessageBubble for showing a single chat message on the ChatScreen.
+// MessageBubble để hiển thị một tin nhắn trò chuyện trên ChatScreen.
 class MessageBubble extends StatelessWidget {
-  // Create a message bubble which is meant to be the first in the sequence.
+  // Tạo bong bóng tin nhắn có nghĩa là bong bóng đầu tiên trong chuỗi.
   const MessageBubble.first({
     super.key,
     required this.userImage,
@@ -11,7 +11,7 @@ class MessageBubble extends StatelessWidget {
     required this.isMe,
   }) : isFirstInSequence = true;
 
-  // Create a message bubble that continues the sequence.
+  // Tạo bong bóng tin nhắn tiếp tục chuỗi cùng user.
   const MessageBubble.next({
     super.key,
     required this.message,
@@ -20,15 +20,15 @@ class MessageBubble extends StatelessWidget {
         userImage = null,
         username = null;
 
-  // Whether or not this message bubble is the first in a sequence of messages
-  // from the same user.
-  // Modifies the message bubble slightly for these different cases - only
-  // shows user image for the first message from the same user, and changes
-  // the shape of the bubble for messages thereafter.
+  // Bong bóng tin nhắn này có phải là bong bóng đầu tiên trong chuỗi tin nhắn hay không
+  // từ cùng một người dùng.
+  // Sửa đổi bong bóng tin nhắn một chút cho các trường hợp khác nhau - chỉ
+  // hiển thị hình ảnh người dùng cho tin nhắn đầu tiên từ cùng một người dùng và các thay đổi
+  // hình dạng bong bóng cho các tin nhắn sau đó.
   final bool isFirstInSequence;
 
-  // Image of the user to be displayed next to the bubble.
-  // Not required if the message is not the first in a sequence.
+  // Hình ảnh của người dùng sẽ được hiển thị bên cạnh bong bóng chat.
+  // Không bắt buộc nếu tin nhắn không phải là tin nhắn đầu tiên trong chuỗi.
   final String? userImage;
 
   // Username of the user.
@@ -36,7 +36,7 @@ class MessageBubble extends StatelessWidget {
   final String? username;
   final String message;
 
-  // Controls how the MessageBubble will be aligned.
+  // Kiểm soát cách căn chỉnh MessageBubble.
   final bool isMe;
 
   @override
@@ -48,22 +48,20 @@ class MessageBubble extends StatelessWidget {
         if (userImage != null)
           Positioned(
             top: 15,
-            // Align user image to the right, if the message is from me.
+            // Căn chỉnh hình ảnh người dùng sang phải nếu tin nhắn là của tôi.
             right: isMe ? 0 : null,
             child: CircleAvatar(
-              backgroundImage: NetworkImage(
-                userImage!,
-              ),
+              backgroundImage: NetworkImage(userImage!),
               backgroundColor: theme.colorScheme.primary.withAlpha(180),
               radius: 23,
             ),
           ),
         Container(
-          // Add some margin to the edges of the messages, to allow space for the
-          // user's image.
+          // Thêm một số lề vào các cạnh của tin nhắn, để có khoảng trống cho
+          // hình ảnh của người dùng.
           margin: const EdgeInsets.symmetric(horizontal: 46),
           child: Row(
-            // The side of the chat screen the message should show at.
+            // Phía màn hình trò chuyện mà tin nhắn sẽ hiển thị.
             mainAxisAlignment:
             isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
@@ -71,8 +69,7 @@ class MessageBubble extends StatelessWidget {
                 crossAxisAlignment:
                 isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                 children: [
-                  // First messages in the sequence provide a visual buffer at
-                  // the top.
+                  // Tin nhắn đầu tiên trong chuỗi tin nhắn
                   if (isFirstInSequence) const SizedBox(height: 18),
                   if (username != null)
                     Padding(
@@ -89,16 +86,16 @@ class MessageBubble extends StatelessWidget {
                       ),
                     ),
 
-                  // The "speech" box surrounding the message.
+                  // Hộp "speech" bao quanh tin nhắn.
                   Container(
                     decoration: BoxDecoration(
                       color: isMe
                           ? Colors.grey[300]
                           : theme.colorScheme.secondary.withAlpha(200),
-                      // Only show the message bubble's "speaking edge" if first in
-                      // the chain.
-                      // Whether the "speaking edge" is on the left or right depends
-                      // on whether or not the message bubble is the current user.
+                      // Chỉ hiển thị "speaking edge" của bong bóng tin nhắn nếu lần đầu tiên ở
+                      // chuôi.
+                      // "speaking edge" nằm bên trái hay bên phải tùy thuộc vào
+                      // xem bong bóng tin nhắn có phải là người dùng hiện tại hay không.
                       borderRadius: BorderRadius.only(
                         topLeft: !isMe && isFirstInSequence
                             ? Radius.zero
@@ -110,9 +107,9 @@ class MessageBubble extends StatelessWidget {
                         bottomRight: const Radius.circular(12),
                       ),
                     ),
-                    // Set some reasonable constraints on the width of the
-                    // message bubble so it can adjust to the amount of text
-                    // it should show.
+                    // Đặt một số ràng buộc hợp lý về độ rộng của
+                    // bong bóng tin nhắn để nó có thể điều chỉnh theo số lượng văn bản
+                    // nó sẽ hiển thị.
                     constraints: const BoxConstraints(maxWidth: 200),
                     padding: const EdgeInsets.symmetric(
                       vertical: 10,

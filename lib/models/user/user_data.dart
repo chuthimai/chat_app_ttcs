@@ -10,7 +10,7 @@ class UserData extends DataObj {
   String _password;
   String? _idJobTransfer;
   String _role;
-  String _avatar = '';
+  String _avatar = 'https://firebasestorage.googleapis.com/v0/b/flutter-chat-ttcs.appspot.com/o/avatar%2Favatar_default.png?alt=media&token=e90d2c5a-404c-4d1d-9b49-5a3d05f19bff';
   bool _state = true;
 
   bool get state => _state;

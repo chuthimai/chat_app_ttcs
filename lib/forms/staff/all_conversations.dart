@@ -55,9 +55,11 @@ class _AllConversationsState extends State<AllConversations> {
           'id': conversation.idConversation,
           'nameConversation': conversation.nameConversation,
           'subtitle': '',
+          'avatar': '',
         };
       }
-      final users = await _manageConversation.getAllMemberOfConversation(conversation);
+      final users = await _manageConversation
+          .getAllMemberOfConversation(conversation.idConversation);
       final user = users
           .where((element) => element.idUser != _firebaseAuth.currentUser!.uid)
           .first;
@@ -65,6 +67,7 @@ class _AllConversationsState extends State<AllConversations> {
         'id': conversation.idConversation,
         'nameConversation': user.fullName,
         'subtitle': user.companyEmail,
+        'avatar': user.avatar,
       };
     }).toList();
     final nameAllCon = await Future.wait(nameAllConDoc);
@@ -73,10 +76,14 @@ class _AllConversationsState extends State<AllConversations> {
     });
   }
 
-  void _selectConversation(BuildContext context) {
+  void _selectConversation(
+      BuildContext context, Map<String, String> conversationInfo) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (ctx) => const DetailConversationScreen(),
+        builder: (ctx) => DetailConversationScreen(
+          idConversation: conversationInfo['id']!,
+          nameConversation: conversationInfo['nameConversation']!,
+        ),
       ),
     );
   }
@@ -102,8 +109,7 @@ class _AllConversationsState extends State<AllConversations> {
             return ListTile(
               leading: CircleAvatar(
                 radius: 26,
-                foregroundImage:
-                    FileImage(File("assets/images/avatar_default.png")),
+                backgroundImage: NetworkImage(conversation['avatar']!),
               ),
               title: Text(
                 conversation['nameConversation']!,
@@ -116,7 +122,7 @@ class _AllConversationsState extends State<AllConversations> {
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
               onTap: () {
-                _selectConversation(context);
+                _selectConversation(context, conversation);
               },
             );
           }),

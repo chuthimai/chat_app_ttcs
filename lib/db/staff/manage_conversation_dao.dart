@@ -29,19 +29,18 @@ class ManageConversationDAO {
   }
 
   Future<List<UserData>> getAllMemberOfConversation(
-      Conversation conversation) async {
+      String idConversation) async {
     final attendingCon = await _db
         .collection('AttendingConversation')
-        .where("idConversation", isEqualTo: conversation.idConversation)
+        .where("idConversation", isEqualTo: idConversation)
         .get()
         .then((value) {
       return value.docs.map((e) {
         return AttendingConversation.toAttendingConversation(e.data());
       }).toList();
     });
-    print('attending = ${attendingCon.length}');
+
     List<UserData> allMember = [];
-    // final numOfAtt =
     for (AttendingConversation attendingCon in attendingCon) {
       final memberDoc =
           await _db.collection("Users").doc(attendingCon.idUser).get();

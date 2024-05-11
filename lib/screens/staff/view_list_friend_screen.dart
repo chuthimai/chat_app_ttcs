@@ -67,9 +67,7 @@ class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
                         leading: InkWell(
                           child: CircleAvatar(
                             radius: 26,
-                            backgroundColor: Colors.black,
-                            foregroundImage: FileImage(
-                                File("assets/images/avatar_default.png")),
+                            backgroundImage: NetworkImage(_currentUser!.avatar),
                           ),
                           onDoubleTap: () {},
                         ),

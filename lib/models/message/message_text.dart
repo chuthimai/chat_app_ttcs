@@ -20,6 +20,9 @@ class MessageText extends Message implements DataObj {
       'idUserSend': idUserSend,
       'contentMessage': _contentMessage,
       'timeSend': timeSend,
+      'isText': true,
+      'isImage': false,
+      'isVoice': false,
     };
   }
 
