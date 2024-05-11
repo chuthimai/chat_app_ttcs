@@ -49,10 +49,14 @@ class _ViewListFriendScreenState extends State<ViewListFriendScreen> {
       source: ImageSource.gallery, // mo thu vien anh de chon
       maxWidth: 600,
     );
+
     if (pickedImage == null) return;
+
     selectedImage = File(pickedImage.path); // chuyen XFile ve File
     _manageUserDAO.saveAvatarImage(selectedImage);
-    await _getCurrentUser();
+
+    await _getCurrentUser(); // tai lai user vi co avatar moi
+
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text("Successfully updated profile picture"),

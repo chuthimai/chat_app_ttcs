@@ -1,5 +1,8 @@
+import 'package:chat_app_ttcs/db/staff/manage_conversation_dao.dart';
 import 'package:chat_app_ttcs/db/user/manage_user_dao.dart';
+import 'package:chat_app_ttcs/forms/staff/create_conversation_key.dart';
 import 'package:chat_app_ttcs/models/user/user_data.dart';
+import 'package:chat_app_ttcs/screens/staff/detail_conversation_screen.dart';
 import 'package:flutter/material.dart';
 
 class SearchUser extends StatefulWidget {
@@ -11,6 +14,7 @@ class SearchUser extends StatefulWidget {
 
 class _SearchUserState extends State<SearchUser> {
   final _manageUser = ManageUserDAO();
+  final _manageConversation = ManageConversationDAO();
   List<UserData> _allNormalUser = [];
   List<UserData> _searchNormalUser = [];
   bool _isSuggestionOpened = false;
@@ -22,6 +26,35 @@ class _SearchUserState extends State<SearchUser> {
     });
   }
 
+  Future<void> _selectUser(UserData selectedUser) async {
+    UserData currentUser = await _manageConversation.getCurrentUser();
+    CreateConversationKey conversationKey =
+        CreateConversationKey(user1: currentUser, user2: selectedUser);
+    final allConversation = await _manageConversation.getAllConversation();
+
+    // kt xem conversation da ton tai chua
+    final exitConversation = allConversation
+        .where((element) {
+          bool compare = element.idConversation.compareTo(conversationKey.key) == 0;
+          return compare;
+    })
+        .toList().isNotEmpty;
+
+    if (!exitConversation) {
+      await _manageConversation.createConversationWith2People(
+          currentUser: currentUser, otherUser: selectedUser);
+    }
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => DetailConversationScreen(
+          idConversation: conversationKey.key,
+          nameConversation: selectedUser.fullName,
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     _getAllNormalUser();
@@ -30,10 +63,9 @@ class _SearchUserState extends State<SearchUser> {
 
   @override
   Widget build(BuildContext context) {
+    // SearchAnchor là một widget cung cấp chức năng tìm kiếm với gợi ý kết quả tìm kiếm.
     return SearchAnchor(
       builder: (BuildContext context, SearchController controller) {
-        // print('lol ---> 0. _allNormalUser = $_allNormalUser');
-        if (_allNormalUser.isEmpty) return const CircularProgressIndicator();
         // print('lol ---> 1.');
         return SearchBar(
           controller: controller,
@@ -49,8 +81,14 @@ class _SearchUserState extends State<SearchUser> {
                       .contains(value.trim().toLowerCase()))
                   .toList();
               // print('lol ---> 3. _searchNormalUser = $_searchNormalUser');
+              controller.openView();
             });
-            controller.openView();
+          },
+          onChanged: (_) {
+            // print('lol ---> 4');
+            setState(() {
+              controller.clearComposing();
+            });
           },
           leading: const Icon(Icons.search),
         );
@@ -72,11 +110,8 @@ class _SearchUserState extends State<SearchUser> {
           return ListTile(
             title: Text(_searchNormalUser.elementAt(index).fullName),
             subtitle: Text(_searchNormalUser.elementAt(index).companyEmail),
-            onTap: () {
-              setState(() {
-                controller
-                    .closeView(_searchNormalUser.elementAt(index).fullName);
-              });
+            onTap: () async {
+              await _selectUser(_searchNormalUser.elementAt(index));
             },
           );
         });

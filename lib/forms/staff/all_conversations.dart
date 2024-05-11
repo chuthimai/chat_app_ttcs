@@ -91,13 +91,17 @@ class _AllConversationsState extends State<AllConversations> {
   @override
   Widget build(BuildContext context) {
     if (_nameAllConversation == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
+      return const Expanded(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
       );
     }
     if (_nameAllConversation!.isEmpty) {
-      return const Center(
-        child: Text("No conversation found."),
+      return const Expanded(
+        child: Center(
+          child: Text("No conversation found."),
+        ),
       );
     }
 
