@@ -39,7 +39,6 @@ class _EditUserFormState extends State<EditUserForm> {
 
   @override
   void initState() {
-    _getAllPosition();
     _getCurrentPosition();
     _getAdminAccount();
     _enterFullName = widget.user.fullName;
@@ -104,7 +103,6 @@ class _EditUserFormState extends State<EditUserForm> {
       role: _enterRole,
     );
     user.idJobTransfer = idJT;
-    print(user.toMap());
     await _db.updateUser(user);
 
     // exit overlay
@@ -120,7 +118,7 @@ class _EditUserFormState extends State<EditUserForm> {
     );
   }
 
-  void _getAllPosition() async {
+  Future<void> _getAllPosition() async {
     final positions = await _db.getAllPosition();
     setState(() {
       _allPositions = positions.toList();
@@ -128,9 +126,13 @@ class _EditUserFormState extends State<EditUserForm> {
   }
 
   void _getCurrentPosition() async {
-    final currentJobTran = await _db.getPosition(widget.user.idJobTransfer);
+    await _getAllPosition();
+    final currentJobTran = await _db.getJobTransfer(widget.user.idJobTransfer);
     setState(() {
-      _currentPosition = _allPositions.where((element) => element.idPosition == currentJobTran.idPosition).first;
+      _currentPosition = _allPositions
+          .where(
+              (element) => element.idPosition == currentJobTran.idNewPosition)
+          .first;
       _enterPosition = _currentPosition;
       _enterDepartment = _enterPosition!.department;
     });
@@ -142,7 +144,9 @@ class _EditUserFormState extends State<EditUserForm> {
 
   @override
   Widget build(BuildContext context) {
-    if (_allPositions.isEmpty) return const CircularProgressIndicator();
+    if (_allPositions.isEmpty ||
+        _enterPosition == null ||
+        _enterDepartment == null) return const Center(child: CircularProgressIndicator());
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 40),
