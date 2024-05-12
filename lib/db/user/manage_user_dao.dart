@@ -49,10 +49,7 @@ class ManageUserDAO {
   }
 
   Future<void> createUser(UserData user) async {
-    await _db
-        .collection('Users')
-        .doc(user.idUser)
-        .set(user.toMap(), SetOptions(merge: true));
+    await updateUser(user); // code giong voi updateUser
   }
 
   Future<void> updateUser(UserData user) async {
@@ -60,6 +57,13 @@ class ManageUserDAO {
         .collection('Users')
         .doc(user.idUser)
         .set(user.toMap(), SetOptions(merge: true));
+  }
+
+  Future<void> deleteUser(UserData user) async {
+    await _db
+        .collection("Users")
+        .doc(user.idUser)
+        .set({'state': false}, SetOptions(merge: true));
   }
 
   void saveAvatarImage(File file) async {

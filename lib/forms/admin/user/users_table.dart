@@ -65,6 +65,18 @@ class _UserTableState extends State<UserTable> {
     );
   }
 
+  void _deleteUser(UserData user) async {
+    await _dbUser.deleteUser(user);
+
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        content: Text('Account ${user.companyEmail} has been deleted'),
+      ),
+    );
+  }
+
   List<DataCell> _showUser(UserData user) {
     final JobTransfer jobTran = _allJobTrans
         .where((element) => element.idJobTransfer == user.idJobTransfer)
@@ -98,7 +110,9 @@ class _UserTableState extends State<UserTable> {
             width: 10,
           ),
           ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              _deleteUser(user);
+            },
             label: const Text("Delete"),
             icon: const Icon(
               Icons.delete,
@@ -159,6 +173,7 @@ class _UserTableState extends State<UserTable> {
               (int index) => DataRow(
                 color: MaterialStateProperty.resolveWith<Color?>(
                     (Set<MaterialState> states) {
+
                   // Tất cả các dòng được chọn sẽ có màu giống nhau.
                   if (states.contains(MaterialState.selected)) {
                     return Theme.of(context)
@@ -166,9 +181,10 @@ class _UserTableState extends State<UserTable> {
                         .primary
                         .withOpacity(0.08);
                   }
+
                   // Các dòng chẵn sẽ có màu xám.
                   if (index.isEven) {
-                    return Colors.grey.withOpacity(0.3);
+                    return Colors.grey.withOpacity(0.1);
                   }
                   return null;
                 }),
