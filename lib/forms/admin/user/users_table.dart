@@ -22,7 +22,7 @@ class _UserTableState extends State<UserTable> {
 
   @override
   void initState() {
-    _getAllUsers();
+    _getAllUsersOn();
     _getAllPosition();
     _getAllJobTransfer();
     _selected = List<bool>.generate(_allUsers.length, (int index) => false);
@@ -49,8 +49,8 @@ class _UserTableState extends State<UserTable> {
     });
   }
 
-  void _getAllUsers() async {
-    final users = await _dbUser.getAllUsers();
+  void _getAllUsersOn() async {
+    final users = await _dbUser.getAllUsersOn();
     setState(() {
       _allUsers = users.toList();
     });
@@ -62,6 +62,29 @@ class _UserTableState extends State<UserTable> {
       isScrollControlled: true,
       context: context,
       builder: (cxt) => EditUserForm(user: user),
+    );
+  }
+
+  Future<void> _clickDelete(UserData user, BuildContext ctx) {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Delete Account'),
+        content: Text('Are you sure you want to delete account ${user.companyEmail}?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, 'OK');
+              _deleteUser(user);
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -111,7 +134,7 @@ class _UserTableState extends State<UserTable> {
           ),
           ElevatedButton.icon(
             onPressed: () {
-              _deleteUser(user);
+              _clickDelete(user, context);
             },
             label: const Text("Delete"),
             icon: const Icon(
@@ -137,7 +160,7 @@ class _UserTableState extends State<UserTable> {
             child: CircularProgressIndicator(),
           );
         }
-        _getAllUsers();
+        _getAllUsersOn();
         _getAllJobTransfer();
         _setSelected();
         return SingleChildScrollView(
@@ -173,7 +196,6 @@ class _UserTableState extends State<UserTable> {
               (int index) => DataRow(
                 color: MaterialStateProperty.resolveWith<Color?>(
                     (Set<MaterialState> states) {
-
                   // Tất cả các dòng được chọn sẽ có màu giống nhau.
                   if (states.contains(MaterialState.selected)) {
                     return Theme.of(context)

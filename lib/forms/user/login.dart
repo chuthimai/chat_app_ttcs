@@ -1,10 +1,7 @@
+import 'package:chat_app_ttcs/db/user/manage_user_dao.dart';
 import 'package:chat_app_ttcs/screens/user/start_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-// Truy cap vao doi tuong Firebase dc SDK Firebase tao va quan ly
-final _firebase = FirebaseAuth.instance;
-
 
 class LoginFrm extends StatefulWidget {
   const LoginFrm({super.key});
@@ -16,11 +13,12 @@ class LoginFrm extends StatefulWidget {
 }
 
 class _LoginFrmState extends State<LoginFrm> {
+  final _firebase = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _enteredEmail = '';
   String _enteredPassword = '';
 
-  void _submit() async {
+  void _clickLogin() async {
     final isValid = _formKey.currentState!.validate(); // KQ chay xac thuc
 
     if (!isValid) return;
@@ -37,7 +35,9 @@ class _LoginFrmState extends State<LoginFrm> {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(error.message ?? 'Your email or password is incorrect.'),
+          duration: const Duration(seconds: 3),
+          content:
+              Text(error.message ?? 'Your email or password is incorrect.'),
         ),
       );
     }
@@ -74,7 +74,6 @@ class _LoginFrmState extends State<LoginFrm> {
               _enteredEmail = value!;
             },
             validator: (value) {
-
               if (value == null ||
                   value.trim().isEmpty ||
                   !value.contains('@cp.vn')) {
@@ -109,7 +108,7 @@ class _LoginFrmState extends State<LoginFrm> {
             children: [
               const Spacer(),
               ElevatedButton(
-                onPressed: _submit,
+                onPressed: _clickLogin,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(213, 246, 189, 208),
                 ),

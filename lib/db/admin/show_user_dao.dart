@@ -27,7 +27,7 @@ class ShowUserDAO extends ManageUserDAO{
   }
 
   Future<List<JobTransfer>> getAllJobTransfer() async {
-    final jobTransfers = await getAllUsers().then((value) {
+    final jobTransfers = await getAllUsersOn().then((value) {
       return value.map((e) async{
         final jobTransDoc = await _db.collection('JobTransfer').doc(e.idJobTransfer).get();
         final jobTrans = JobTransfer.toJobTransfer(jobTransDoc.data()!);

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:chat_app_ttcs/db/staff/manage_conversation_dao.dart';
 import 'package:chat_app_ttcs/models/attending_conversation.dart';
 import 'package:chat_app_ttcs/models/conversation.dart';
@@ -65,7 +64,7 @@ class _AllConversationsState extends State<AllConversations> {
     }).toList();
     final nameAllCon = await Future.wait(nameAllConDoc);
     setState(() {
-      _nameAllConversation = nameAllCon.toList() ?? [];
+      _nameAllConversation = nameAllCon.toList();
     });
   }
 
@@ -86,11 +85,14 @@ class _AllConversationsState extends State<AllConversations> {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection("AttendingConversation")
-          .where('idUser')
+          .where('idUser', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
           .snapshots(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+        if (_nameAllConversation == null) {
+          _mapConversation();
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
 
         if (!snapshot.hasData) {
@@ -120,8 +122,8 @@ class _AllConversationsState extends State<AllConversations> {
                       conversation['subtitle']!,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 10),
                     onTap: () {
                       _selectConversation(context, conversation);
                     },

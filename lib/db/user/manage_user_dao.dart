@@ -4,6 +4,7 @@ import 'package:chat_app_ttcs/models/user/user_auth.dart';
 import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class ManageUserDAO {
@@ -14,7 +15,7 @@ class ManageUserDAO {
       .child('avatar')
       .child('${FirebaseAuth.instance.currentUser!.uid}.png');
 
-  Future<List<UserData>> getAllUsers() async {
+  Future<List<UserData>> getAllUsersOn() async {
     final users = await _db.collection('Users').get().then((value) {
       return value.docs.map((e) {
         return UserData.toUser(e.data());
@@ -24,8 +25,18 @@ class ManageUserDAO {
     return users.toList();
   }
 
+  Future<List<UserData>> getAllUsers() async {
+    final users = await _db.collection('Users').get().then((value) {
+      return value.docs.map((e) {
+        return UserData.toUser(e.data());
+      });
+    });
+
+    return users.toList();
+  }
+
   Future<List<UserData>> getAllNormalUsers() async {
-    final users = await getAllUsers();
+    final users = await getAllUsersOn();
     final normalUsers = users.where((element) => element.role == "Normal User");
 
     return normalUsers.toList();
@@ -64,6 +75,13 @@ class ManageUserDAO {
         .collection("Users")
         .doc(user.idUser)
         .set({'state': false}, SetOptions(merge: true));
+
+    final admin = await getCurrentUser();
+
+    await _firebaseAuth.signInWithEmailAndPassword(email: user.companyEmail, password: user.password);
+    await _firebaseAuth.currentUser!.delete();
+
+    await _firebaseAuth.signInWithEmailAndPassword(email: admin.companyEmail, password: admin.password);
   }
 
   void saveAvatarImage(File file) async {
