@@ -12,7 +12,11 @@ class StartScreen extends StatelessWidget {
     Widget form = titleAppBar=="Login" ? const LoginFrm() : const ForgotPasswordFrm();
     var size = MediaQuery.of(context).size.width;
     double marginHor = 70;
-    if (size < 469) marginHor = 70 - (469 - size)/2;
+    if (size < 469) {
+      marginHor = 70 - (469 - size)/2;
+    } else {
+      marginHor = 70 + (size - 469)/3.5;
+    }
     if (marginHor < 0) marginHor = 0;
 
     return Scaffold(
