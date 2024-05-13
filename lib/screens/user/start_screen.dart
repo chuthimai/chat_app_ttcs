@@ -10,6 +10,10 @@ class StartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget form = titleAppBar=="Login" ? const LoginFrm() : const ForgotPasswordFrm();
+    var size = MediaQuery.of(context).size.width;
+    double marginHor = 70;
+    if (size < 469) marginHor = 70 - (469 - size)/2;
+    if (marginHor < 0) marginHor = 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -17,10 +21,11 @@ class StartScreen extends StatelessWidget {
       ),
       body: Center(
         child: Card(
-          margin: const EdgeInsets.symmetric(horizontal: 70),
+          margin: EdgeInsets.symmetric(horizontal: marginHor),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
             child: SingleChildScrollView(
+              // scrollDirection: Axis.horizontal,
               child: form,
             ),
           ),

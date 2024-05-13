@@ -1,4 +1,3 @@
-import 'package:chat_app_ttcs/db/user/manage_user_dao.dart';
 import 'package:chat_app_ttcs/screens/user/start_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +56,7 @@ class _LoginFrmState extends State<LoginFrm> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Loggin Form",
+            "Login Form",
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 30),
