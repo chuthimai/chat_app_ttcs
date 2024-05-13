@@ -64,6 +64,13 @@ class _ChatMessagesState extends State<ChatMessages> {
           }
 
           final loadedMessages = chatSnapshots.data!.docs;
+
+          if (loadedMessages.isEmpty) {
+            return const Center(
+              child: Text("Let's start the conversation."),
+            );
+          }
+
           return ListView.builder(
             padding: const EdgeInsets.only(
               bottom: 40,
