@@ -28,6 +28,8 @@
 		33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F22044A3C60003C045 /* Assets.xcassets */; };
 		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
 		33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC11122044BFA00003C045 /* MainFlutterWindow.swift */; };
+		75A5B9262BF38610008C06B5 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F72044A3C60003C045 /* Info.plist */; };
+		75E0FDA52BF3C0D800FE53FF /* RunnerTests.xctest in Resources */ = {isa = PBXBuildFile; fileRef = 331C80D5294CF71000263BE5 /* RunnerTests.xctest */; };
 		DD03D91FE4AD3068AF2FE7B4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1E77EBEE887522F999E2EFF3 /* GoogleService-Info.plist */; };
 		F1081E0DE0E2DB52AADCEF2E /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D37341E310F5FA6D5FD70ADC /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
@@ -317,6 +319,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75E0FDA52BF3C0D800FE53FF /* RunnerTests.xctest in Resources */,
+				75A5B9262BF38610008C06B5 /* Info.plist in Resources */,
 				33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */,
 				33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */,
 				DD03D91FE4AD3068AF2FE7B4 /* GoogleService-Info.plist in Resources */,
