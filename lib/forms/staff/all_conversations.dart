@@ -48,6 +48,7 @@ class _AllConversationsState extends State<AllConversations> {
           'nameConversation': conversation.nameConversation,
           'subtitle': '',
           'avatar': '',
+          'isGroup': 'T',
         };
       }
       final users = await _manageConversation
@@ -60,6 +61,7 @@ class _AllConversationsState extends State<AllConversations> {
         'nameConversation': user.fullName,
         'subtitle': user.companyEmail,
         'avatar': user.avatar,
+        'isGroup': 'F'
       };
     }).toList();
     final nameAllCon = await Future.wait(nameAllConDoc);
@@ -75,6 +77,7 @@ class _AllConversationsState extends State<AllConversations> {
         builder: (ctx) => DetailConversationScreen(
           idConversation: conversationInfo['id']!,
           nameConversation: conversationInfo['nameConversation']!,
+          isGroup: conversationInfo['isGroup'] == 'T' ? true : false,
         ),
       ),
     );

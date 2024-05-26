@@ -38,24 +38,6 @@ class ShowUserDAO extends ManageUserDAO{
     return Future.wait(jobTransfers);
   }
 
-  Future<Position> getPosition(String idJobTransfer) async {
-    final jobTransferDoc =
-        await _db.collection('JobTransfer').doc(idJobTransfer).get();
-    final jobTransfer = JobTransfer.toJobTransfer(jobTransferDoc.data()!);
-
-    final positionDoc = await _db
-        .collection('Position')
-        .doc(jobTransfer.idNewPosition.toString())
-        .get();
-    final position = Position.toPosition(positionDoc.data()!);
-
-    final departmentDoc = await positionDoc.data()!['department'].get();
-    final department = Department.toDepartment(departmentDoc.data()!);
-
-    position.department = department;
-    return position;
-  }
-
   Future<JobTransfer> getJobTransfer(String idJobTransfer) async {
     final jobTransferDoc =
     await _db.collection('JobTransfer').doc(idJobTransfer).get();

@@ -50,6 +50,7 @@ class _SearchUserState extends State<SearchUser> {
         builder: (ctx) => DetailConversationScreen(
           idConversation: conversationKey.key,
           nameConversation: selectedUser.fullName,
+          isGroup: false,
         ),
       ),
     );

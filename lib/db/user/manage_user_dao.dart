@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:chat_app_ttcs/models/department.dart';
+import 'package:chat_app_ttcs/models/job_transfer.dart';
+import 'package:chat_app_ttcs/models/position.dart';
 import 'package:chat_app_ttcs/models/user/user_auth.dart';
 import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -91,5 +94,23 @@ class ManageUserDAO {
         .collection('Users')
         .doc(_firebaseAuth.currentUser!.uid)
         .update({'avatar': imageURL});
+  }
+
+  Future<Position> getPosition(String idJobTransfer) async {
+    final jobTransferDoc =
+    await _db.collection('JobTransfer').doc(idJobTransfer).get();
+    final jobTransfer = JobTransfer.toJobTransfer(jobTransferDoc.data()!);
+
+    final positionDoc = await _db
+        .collection('Position')
+        .doc(jobTransfer.idNewPosition.toString())
+        .get();
+    final position = Position.toPosition(positionDoc.data()!);
+
+    final departmentDoc = await positionDoc.data()!['department'].get();
+    final department = Department.toDepartment(departmentDoc.data()!);
+
+    position.department = department;
+    return position;
   }
 }
