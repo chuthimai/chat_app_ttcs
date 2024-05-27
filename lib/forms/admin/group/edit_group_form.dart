@@ -1,20 +1,21 @@
 import 'package:chat_app_ttcs/forms/admin/group/members_table.dart';
-import 'package:chat_app_ttcs/forms/admin/user/users_table.dart';
-import 'package:chat_app_ttcs/forms/search/search.dart';
+import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:flutter/material.dart';
 
-class GroupForm extends StatefulWidget {
-  const GroupForm({super.key});
+class EditGroupForm extends StatefulWidget {
+  final List<UserData> allMember;
+  const EditGroupForm({super.key, required this.allMember});
 
   @override
-  State<GroupForm> createState() => _GroupFormState();
+  State<EditGroupForm> createState() => _EditGroupFormState();
 }
 
-class _GroupFormState extends State<GroupForm> {
+class _EditGroupFormState extends State<EditGroupForm> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 40),
@@ -24,7 +25,7 @@ class _GroupFormState extends State<GroupForm> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Group",
+                "Edit Group",
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!
@@ -49,19 +50,7 @@ class _GroupFormState extends State<GroupForm> {
               ),
               TextFormField(
                 readOnly: true,
-                initialValue: "Someone",
-                decoration: const InputDecoration(
-                  filled: true,
-                  border: OutlineInputBorder(),
-                  labelText: "Leader",
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              TextFormField(
-                readOnly: true,
-                initialValue: "3",
+                initialValue: widget.allMember.length.toString(),
                 decoration: const InputDecoration(
                   filled: true,
                   border: OutlineInputBorder(),
@@ -71,11 +60,7 @@ class _GroupFormState extends State<GroupForm> {
               const SizedBox(
                 height: 16,
               ),
-              const SearchUser(),
-              const SizedBox(
-                height: 16,
-              ),
-              MembersTable(),
+              MembersTable(allMember: [],),
               const SizedBox(
                 height: 20,
               ),

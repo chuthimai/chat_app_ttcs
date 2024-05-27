@@ -80,6 +80,4 @@ class ManageConversationDAO extends ManageUserDAO {
     await _db.collection('AttendingConversation').add(attend1.toMap());
     await _db.collection('AttendingConversation').add(attend2.toMap());
   }
-
-  void addMember(Conversation conversation, UserData member) {}
 }

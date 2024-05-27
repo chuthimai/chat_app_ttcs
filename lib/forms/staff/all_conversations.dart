@@ -47,7 +47,7 @@ class _AllConversationsState extends State<AllConversations> {
           'id': conversation.idConversation,
           'nameConversation': conversation.nameConversation,
           'subtitle': '',
-          'avatar': '',
+          'avatar': 'https://firebasestorage.googleapis.com/v0/b/flutter-chat-ttcs.appspot.com/o/group%2Fdefault.png?alt=media&token=17ecf2b9-e3c0-465b-a0e3-b3e818fa08cc',
           'isGroup': 'T',
         };
       }

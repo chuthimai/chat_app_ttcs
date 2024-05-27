@@ -1,48 +1,23 @@
+import 'package:chat_app_ttcs/models/group/member.dart';
 import 'package:flutter/material.dart';
 
 class MembersTable extends StatefulWidget {
-  const MembersTable({super.key});
+  final List<Member> allMember;
+
+  const MembersTable({super.key, required this.allMember});
 
   @override
   State<MembersTable> createState() => _MembersTableState();
 }
 
 class _MembersTableState extends State<MembersTable> {
-  DataRow _showMember() {
-    return DataRow(
-        cells: [
-          DataCell(Text("Chu Thi Mai")),
-          DataCell(Text("Female")),
-          DataCell(Text("MaiCT@cp.vn")),
-          DataCell(Text("None")),
-          DataCell(Text("None")),
-          DataCell(Text("Leader")),
-          DataCell(Row(
-            children: [
-              ElevatedButton.icon(
-                onPressed: () {},
-                label: const Text("Leader"),
-                icon: const Icon(
-                  Icons.edit,
-                  size: 13,
-                ),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(213, 246, 189, 208)),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              ElevatedButton.icon(
-                onPressed: () {},
-                label: const Text("Delete"),
-                icon: const Icon(
-                  Icons.delete,
-                  size: 13,
-                ),
-              ),
-            ],
-          ))
-        ]);
+  List<DataCell> _showMember(Member user) {
+    return [
+      DataCell(Text(user.fullName)),
+      DataCell(Text(user.gender ? "Male" : "Female")),
+      DataCell(Text(user.email)),
+      DataCell(Text(user.roleInGroup)),
+    ];
   }
 
   @override
@@ -61,23 +36,28 @@ class _MembersTableState extends State<MembersTable> {
             label: Text("Email"),
           ),
           DataColumn(
-            label: Text("Department"),
-          ),
-          DataColumn(
-            label: Text("Position"),
-          ),
-          DataColumn(
             label: Text("Role in Group"),
           ),
-          DataColumn(
-            label: Text(""),
+        ],
+        rows: List<DataRow>.generate(
+          widget.allMember.length,
+          (int index) => DataRow(
+            color: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
+              // Tất cả các dòng được chọn sẽ có màu giống nhau.
+              if (states.contains(MaterialState.selected)) {
+                return Theme.of(context).colorScheme.primary.withOpacity(0.08);
+              }
+
+              // Các dòng chẵn sẽ có màu xám.
+              if (index.isEven) {
+                return Colors.grey.withOpacity(0.1);
+              }
+              return null;
+            }),
+            cells: _showMember(widget.allMember.elementAt(index)),
           ),
-        ],
-        rows: [
-          _showMember(),
-          _showMember(),
-          _showMember(),
-        ],
+        ),
       ),
     );
   }

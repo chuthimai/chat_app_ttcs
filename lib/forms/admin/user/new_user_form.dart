@@ -101,12 +101,12 @@ class _NewUserFormState extends State<NewUserForm> {
     // exit overlay
     Navigator.pop(context);
 
-    // show notification add new users successfully
+    // show notification add new user successfully
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         duration: Duration(seconds: 3),
-        content: Text('Add new users successfully.'),
+        content: Text('Add new user successfully.'),
       ),
     );
   }

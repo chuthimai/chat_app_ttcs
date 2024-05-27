@@ -3,6 +3,7 @@ import 'package:chat_app_ttcs/screens/admin/all_users_screen.dart';
 import 'package:chat_app_ttcs/screens/user/change_password_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AdminMainScreen extends StatefulWidget {
   const AdminMainScreen({super.key});
@@ -12,7 +13,8 @@ class AdminMainScreen extends StatefulWidget {
 }
 
 class _AdminMainScreenState extends State<AdminMainScreen> {
-  Widget _form = const AllUsersScreen();
+  // Pham vi sd provider trong all user screen
+  Widget _form = const ProviderScope(child: AllUsersScreen());
 
   void _selectChangePassword(BuildContext context) {
     Navigator.of(context).push(
@@ -79,7 +81,7 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
                 ),
                 onTap: () {
                   setState(() {
-                    _form = const AllUsersScreen();
+                    _form = const ProviderScope(child: AllUsersScreen());
                     Navigator.pop(context);
                   });
                 },

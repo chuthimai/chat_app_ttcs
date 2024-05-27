@@ -3,17 +3,19 @@ import 'package:chat_app_ttcs/forms/admin/user/edit_user_form.dart';
 import 'package:chat_app_ttcs/models/job_transfer.dart';
 import 'package:chat_app_ttcs/models/position.dart';
 import 'package:chat_app_ttcs/models/user/user_data.dart';
+import 'package:chat_app_ttcs/providers/selected_users_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UserTable extends StatefulWidget {
+class UserTable extends ConsumerStatefulWidget {
   const UserTable({super.key});
 
   @override
-  State<UserTable> createState() => _UserTableState();
+  ConsumerState<UserTable> createState() => _UserTableState();
 }
 
-class _UserTableState extends State<UserTable> {
+class _UserTableState extends ConsumerState<UserTable> {
   final _dbUser = ShowUserDAO();
   List<UserData> _allUsers = [];
   List<Position> _allPositions = [];
@@ -70,7 +72,8 @@ class _UserTableState extends State<UserTable> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         title: const Text('Delete Account'),
-        content: Text('Are you sure you want to delete account ${user.companyEmail}?'),
+        content: Text(
+            'Are you sure you want to delete account ${user.companyEmail}?'),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -215,6 +218,11 @@ class _UserTableState extends State<UserTable> {
                 onSelectChanged: (bool? value) {
                   setState(() {
                     _selected[index] = value!;
+                    ref
+                        .watch(selectedUsersProvider.notifier)
+                        .selectedUser(_allUsers.where((element) {
+                         return _selected.elementAt(_allUsers.indexOf(element)) && element.role != 'Admin';
+                    }).toList());
                   });
                 },
               ),

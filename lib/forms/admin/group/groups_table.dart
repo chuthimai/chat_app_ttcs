@@ -1,4 +1,4 @@
-import 'package:chat_app_ttcs/forms/admin/group/group_form.dart';
+import 'package:chat_app_ttcs/forms/admin/group/edit_group_form.dart';
 import 'package:flutter/material.dart';
 
 class GroupTable extends StatefulWidget {
@@ -15,7 +15,7 @@ class _GroupTableState extends State<GroupTable> {
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
-      builder: (cxt) => GroupForm(),
+      builder: (cxt) => EditGroupForm(allMember: [],),
     );
   }
 
@@ -23,15 +23,9 @@ class _GroupTableState extends State<GroupTable> {
 
   DataRow _showGroup() {
     return DataRow(
-        selected: isCheck,
-        onSelectChanged: (bool? b) {
-          setState(() {
-            isCheck = !isCheck;
-          });
-        },
         cells: [
           DataCell(Text("Group 1")),
-          DataCell(Text("3")),
+          DataCell(Align(alignment: Alignment.center, child: Text("3",))),
           DataCell(Text("MaiCT")),
           DataCell(Row(
             children: [
