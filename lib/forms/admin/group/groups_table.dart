@@ -1,5 +1,5 @@
 import 'package:chat_app_ttcs/db/group/manage_group_dao.dart';
-import 'package:chat_app_ttcs/forms/admin/group/edit_group_form.dart';
+import 'package:chat_app_ttcs/forms/admin/group/view_group_form.dart';
 import 'package:chat_app_ttcs/models/group/group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class _GroupTableState extends State<GroupTable> {
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
-      builder: (cxt) => EditGroupForm(group: group,),
+      builder: (cxt) => ViewGroupForm(group: group,),
     );
   }
 
@@ -51,9 +51,9 @@ class _GroupTableState extends State<GroupTable> {
                 onPressed: () {
                   _openEditGroupForm(group);
                 },
-                label: const Text("Edit"),
+                label: const Text("View"),
                 icon: const Icon(
-                  Icons.edit,
+                  Icons.remove_red_eye_outlined,
                   size: 13,
                 ),
                 style: ElevatedButton.styleFrom(

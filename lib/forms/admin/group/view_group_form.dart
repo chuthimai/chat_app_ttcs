@@ -3,15 +3,15 @@ import 'package:chat_app_ttcs/models/group/group.dart';
 import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:flutter/material.dart';
 
-class EditGroupForm extends StatefulWidget {
+class ViewGroupForm extends StatefulWidget {
   final Group group;
-  const EditGroupForm({super.key, required this.group});
+  const ViewGroupForm({super.key, required this.group});
 
   @override
-  State<EditGroupForm> createState() => _EditGroupFormState();
+  State<ViewGroupForm> createState() => _ViewGroupFormState();
 }
 
-class _EditGroupFormState extends State<EditGroupForm> {
+class _ViewGroupFormState extends State<ViewGroupForm> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -27,7 +27,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Edit Group",
+                "View Group",
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!
@@ -36,16 +36,13 @@ class _EditGroupFormState extends State<EditGroupForm> {
               const SizedBox(height: 30),
               TextFormField(
                 maxLength: 50,
-                keyboardType: TextInputType.name,
+                readOnly: true,
+                initialValue: widget.group.nameGroup,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "Group Name",
+                  filled: true,
                 ),
-                onSaved: (value) {},
-                validator: (value) {
-                  // Kt trong database
-                  return null;
-                },
               ),
               const SizedBox(
                 height: 16,
@@ -70,20 +67,12 @@ class _EditGroupFormState extends State<EditGroupForm> {
                 children: [
                   const Spacer(),
                   ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(213, 246, 189, 208),
-                    ),
-                    child: const Text("Save"),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    style: ElevatedButton.styleFrom(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(213, 246, 189, 208),
+                    ),
                     child: const Text("Cancel"),
                   ),
                 ],
