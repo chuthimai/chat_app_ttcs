@@ -1,10 +1,11 @@
 import 'package:chat_app_ttcs/forms/admin/group/members_table.dart';
+import 'package:chat_app_ttcs/models/group/group.dart';
 import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:flutter/material.dart';
 
 class EditGroupForm extends StatefulWidget {
-  final List<UserData> allMember;
-  const EditGroupForm({super.key, required this.allMember});
+  final Group group;
+  const EditGroupForm({super.key, required this.group});
 
   @override
   State<EditGroupForm> createState() => _EditGroupFormState();
@@ -15,6 +16,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
 
   @override
   Widget build(BuildContext context) {
+    final allMember = widget.group.allMember;
 
     return SingleChildScrollView(
       child: Padding(
@@ -50,7 +52,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
               ),
               TextFormField(
                 readOnly: true,
-                initialValue: widget.allMember.length.toString(),
+                initialValue: allMember.length.toString(),
                 decoration: const InputDecoration(
                   filled: true,
                   border: OutlineInputBorder(),
@@ -60,7 +62,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
               const SizedBox(
                 height: 16,
               ),
-              MembersTable(allMember: [],),
+              MembersTable(allMember: allMember,),
               const SizedBox(
                 height: 20,
               ),

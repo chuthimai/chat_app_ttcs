@@ -3,7 +3,6 @@ import 'package:chat_app_ttcs/forms/admin/user/new_user_form.dart';
 import 'package:chat_app_ttcs/forms/admin/user/users_table.dart';
 import 'package:chat_app_ttcs/forms/search/search.dart';
 import 'package:chat_app_ttcs/models/group/member.dart';
-import 'package:chat_app_ttcs/models/user/user_data.dart';
 import 'package:chat_app_ttcs/providers/selected_users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
