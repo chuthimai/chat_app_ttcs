@@ -1,16 +1,17 @@
 # chat_app_ttcs
 
-A new Flutter project.
+Flutter project.
 
-## Getting Started
+## Các folder trong project
 
-This project is a starting point for a Flutter application.
+- db: chứa các class xử lý tương tác với CSDL. 
+- forms: chứa các class trả về widget thành phần tạo nên screen. 
+- models: chứa các class đóng gói các đối tượng. 
+- process: chứa các class để xử lý tên,email, tạo mật khẩu ngẫu nhiên. 
+- screens: chứa các màn hình chính.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Các tài khoản
+- admin: 
+  - email: maict@cp.vn
+  - password: 123456
+- normal account: can create when login admin account
